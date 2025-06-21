@@ -1,17 +1,16 @@
-import { defineStore } from "pinia";
-import { AuthState } from "@/stores/interface";
-import { getAuthButtonListApi, getAuthMenuListApi } from "@/api/modules/login";
-import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList } from "@/utils";
+import { defineStore } from 'pinia'
+import type { AuthState } from '@/stores/interface'
+import { getAuthButtonListApi, getAuthMenuListApi } from '@/api/modules/login'
+import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList } from '@/utils'
 
-export const useAuthStore = defineStore({
-  id: "geeker-auth",
+export const useAuthStore = defineStore('geeker-auth', {
   state: (): AuthState => ({
     // 按钮权限列表
     authButtonList: {},
     // 菜单权限列表
     authMenuList: [],
     // 当前页面的 router name，用来做按钮权限筛选
-    routeName: ""
+    routeName: '',
   }),
   getters: {
     // 按钮权限列表
@@ -23,22 +22,20 @@ export const useAuthStore = defineStore({
     // 菜单权限列表 ==> 扁平化之后的一维数组菜单，主要用来添加动态路由
     flatMenuListGet: state => getFlatMenuList(state.authMenuList),
     // 递归处理后的所有面包屑导航列表
-    breadcrumbListGet: state => getAllBreadcrumbList(state.authMenuList)
+    breadcrumbListGet: state => getAllBreadcrumbList(state.authMenuList),
   },
   actions: {
     // Get AuthButtonList
     async getAuthButtonList() {
-      const { data } = await getAuthButtonListApi();
-      this.authButtonList = data;
+      this.authButtonList = await getAuthButtonListApi()
     },
     // Get AuthMenuList
     async getAuthMenuList() {
-      const { data } = await getAuthMenuListApi();
-      this.authMenuList = data;
+      this.authMenuList = await getAuthMenuListApi()
     },
     // Set RouteName
     async setRouteName(name: string) {
-      this.routeName = name;
-    }
-  }
-});
+      this.routeName = name
+    },
+  },
+})

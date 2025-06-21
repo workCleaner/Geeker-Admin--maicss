@@ -13,83 +13,83 @@
 </template>
 
 <script setup lang="ts" name="guide">
-import { driver } from "driver.js";
-import "driver.js/dist/driver.css";
+import { driver } from 'driver.js'
+import 'driver.js/dist/driver.css'
 
 const driverObj = driver({
   allowClose: true,
-  doneBtnText: "结束",
-  nextBtnText: "下一步",
-  prevBtnText: "上一步",
+  doneBtnText: '结束',
+  nextBtnText: '下一步',
+  prevBtnText: '上一步',
   steps: [
     {
-      element: "#collapseIcon",
+      element: '#collapseIcon',
       popover: {
-        title: "Collapse Icon",
-        description: "Open && Close sidebar",
-        side: "right"
-      }
+        title: 'Collapse Icon',
+        description: 'Open && Close sidebar',
+        side: 'right',
+      },
     },
     {
-      element: "#breadcrumb",
+      element: '#breadcrumb',
       popover: {
-        title: "Breadcrumb",
-        description: "Indicate the current page location",
-        side: "right"
-      }
+        title: 'Breadcrumb',
+        description: 'Indicate the current page location',
+        side: 'right',
+      },
     },
     {
-      element: "#assemblySize",
+      element: '#assemblySize',
       popover: {
-        title: "Switch Assembly Size",
-        description: "Switch the system size",
-        side: "left"
-      }
+        title: 'Switch Assembly Size',
+        description: 'Switch the system size',
+        side: 'left',
+      },
     },
     {
-      element: "#language",
+      element: '#language',
       popover: {
-        title: "Switch Language",
-        description: "Switch the system language",
-        side: "left"
-      }
+        title: 'Switch Language',
+        description: 'Switch the system language',
+        side: 'left',
+      },
     },
     {
-      element: "#searchMenu",
+      element: '#searchMenu',
       popover: {
-        title: "Page Search",
-        description: "Page search, quick navigation",
-        side: "left"
-      }
+        title: 'Page Search',
+        description: 'Page search, quick navigation',
+        side: 'left',
+      },
     },
     {
-      element: "#themeSetting",
+      element: '#themeSetting',
       popover: {
-        title: "Setting theme",
-        description: "Customize settings theme",
-        side: "left"
-      }
+        title: 'Setting theme',
+        description: 'Customize settings theme',
+        side: 'left',
+      },
     },
     {
-      element: "#message",
+      element: '#message',
       popover: {
-        title: "Message Notification",
-        description: "Can receive company information",
-        side: "left"
-      }
+        title: 'Message Notification',
+        description: 'Can receive company information',
+        side: 'left',
+      },
     },
     {
-      element: "#fullscreen",
+      element: '#fullscreen',
       popover: {
-        title: "Full Screen",
-        description: "Full Screen, Exit The Full Screen Page",
-        side: "left"
-      }
-    }
-  ]
-});
+        title: 'Full Screen',
+        description: 'Full Screen, Exit The Full Screen Page',
+        side: 'left',
+      },
+    },
+  ],
+})
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>

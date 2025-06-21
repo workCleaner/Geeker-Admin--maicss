@@ -3,7 +3,7 @@
     <el-sub-menu v-if="subItem.children?.length" :index="subItem.path">
       <template #title>
         <el-icon v-if="subItem.meta.icon">
-          <component :is="subItem.meta.icon"></component>
+          <component :is="subItem.meta.icon" />
         </el-icon>
         <span class="sle">{{ subItem.meta.title }}</span>
       </template>
@@ -11,7 +11,7 @@
     </el-sub-menu>
     <el-menu-item v-else :index="subItem.path" @click="handleClickMenu(subItem)">
       <el-icon v-if="subItem.meta.icon">
-        <component :is="subItem.meta.icon"></component>
+        <component :is="subItem.meta.icon" />
       </el-icon>
       <template #title>
         <span class="sle">{{ subItem.meta.title }}</span>
@@ -21,15 +21,18 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+defineOptions({
+  name: 'SubMenu',
+})
+import { useRouter } from 'vue-router'
 
-defineProps<{ menuList: Menu.MenuOptions[] }>();
+defineProps<{ menuList: Menu.MenuOptions[] }>()
 
-const router = useRouter();
+const router = useRouter()
 const handleClickMenu = (subItem: Menu.MenuOptions) => {
-  if (subItem.meta.isLink) return window.open(subItem.meta.isLink, "_blank");
-  router.push(subItem.path);
-};
+  if (subItem.meta.isLink) return window.open(subItem.meta.isLink, '_blank')
+  router.push(subItem.path)
+}
 </script>
 
 <style lang="scss">
@@ -57,7 +60,7 @@ const handleClickMenu = (subItem: Menu.MenuOptions) => {
       top: 0;
       bottom: 0;
       width: 4px;
-      content: "";
+      content: '';
       background-color: var(--el-color-primary);
     }
   }

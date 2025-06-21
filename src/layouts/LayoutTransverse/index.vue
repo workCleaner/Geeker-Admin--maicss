@@ -12,15 +12,20 @@
           <el-sub-menu v-if="subItem.children?.length" :key="subItem.path" :index="subItem.path + 'el-sub-menu'">
             <template #title>
               <el-icon>
-                <component :is="subItem.meta.icon"></component>
+                <component :is="subItem.meta.icon" />
               </el-icon>
               <span>{{ subItem.meta.title }}</span>
             </template>
-            <SubMenu :menu-list="subItem.children" />
+            <sub-menu :menu-list="subItem.children" />
           </el-sub-menu>
-          <el-menu-item v-else :key="subItem.path + 'el-menu-item'" :index="subItem.path" @click="handleClickMenu(subItem)">
+          <el-menu-item
+            v-else
+            :key="subItem.path + 'el-menu-item'"
+            :index="subItem.path"
+            @click="handleClickMenu(subItem)"
+          >
             <el-icon>
-              <component :is="subItem.meta.icon"></component>
+              <component :is="subItem.meta.icon" />
             </el-icon>
             <template #title>
               <span>{{ subItem.meta.title }}</span>
@@ -28,34 +33,37 @@
           </el-menu-item>
         </template>
       </el-menu>
-      <ToolBarRight />
+      <tool-bar-right />
     </el-header>
-    <Main />
+    <MainContainer />
   </el-container>
 </template>
 
 <script setup lang="ts" name="layoutTransverse">
-import { computed } from "vue";
-import { useAuthStore } from "@/stores/modules/auth";
-import { useRoute, useRouter } from "vue-router";
-import Main from "@/layouts/components/Main/index.vue";
-import ToolBarRight from "@/layouts/components/Header/ToolBarRight.vue";
-import SubMenu from "@/layouts/components/Menu/SubMenu.vue";
+defineOptions({
+  name: 'LayoutTransverse',
+})
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/modules/auth'
+import { useRoute, useRouter } from 'vue-router'
+import MainContainer from '@/layouts/components/Main/index.vue'
+import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
+import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
 
-const title = import.meta.env.VITE_GLOB_APP_TITLE;
+const title = import.meta.env.VITE_GLOB_APP_TITLE
 
-const route = useRoute();
-const router = useRouter();
-const authStore = useAuthStore();
-const menuList = computed(() => authStore.showMenuListGet);
-const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string);
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const menuList = computed(() => authStore.showMenuListGet)
+const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string)
 
 const handleClickMenu = (subItem: Menu.MenuOptions) => {
-  if (subItem.meta.isLink) return window.open(subItem.meta.isLink, "_blank");
-  router.push(subItem.path);
-};
+  if (subItem.meta.isLink) return window.open(subItem.meta.isLink, '_blank')
+  router.push(subItem.path)
+}
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>

@@ -30,8 +30,8 @@
       </el-form-item>
       <el-form-item label="Resources :">
         <el-radio-group v-model="formData.resource">
-          <el-radio value="Sponsor">Sponsor</el-radio>
-          <el-radio value="Venue">Venue</el-radio>
+          <el-radio value="Sponsor"> Sponsor </el-radio>
+          <el-radio value="Venue"> Venue </el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="Activity form :">
@@ -46,26 +46,26 @@
 </template>
 
 <script setup lang="ts" name="basicForm">
-import { ElMessage } from "element-plus";
-import { reactive } from "vue";
+import { ElMessage } from 'element-plus'
+import { reactive } from 'vue'
 
 // do not use same name with ref
 const formData = reactive({
-  name: "",
-  region: "",
-  date1: "",
-  date2: "",
+  name: '',
+  region: '',
+  date1: '',
+  date2: '',
   delivery: false,
   type: [],
-  resource: "",
-  desc: ""
-});
+  resource: '',
+  desc: '',
+})
 
 const onSubmit = () => {
-  ElMessage.success("提交的数据为 : " + JSON.stringify(formData));
-};
+  ElMessage.success('提交的数据为 : ' + JSON.stringify(formData))
+}
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>

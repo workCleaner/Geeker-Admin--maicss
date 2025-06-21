@@ -1,7 +1,7 @@
 <template>
   <div class="login-container flx-center">
     <div class="login-box">
-      <SwitchDark class="dark" />
+      <switch-dark class="dark" />
       <div class="login-left">
         <img class="login-left-img" src="@/assets/images/login_left.png" alt="login" />
       </div>
@@ -10,17 +10,17 @@
           <img class="login-icon" src="@/assets/images/logo.svg" alt="" />
           <h2 class="logo-text">Geeker-Admin</h2>
         </div>
-        <LoginForm />
+        <login-form />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts" name="login">
-import LoginForm from "./components/LoginForm.vue";
-import SwitchDark from "@/components/SwitchDark/index.vue";
+import LoginForm from './components/LoginForm.vue'
+import SwitchDark from '@/components/SwitchDark/index.vue'
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>

@@ -10,10 +10,10 @@
 </template>
 
 <script setup lang="ts" name="500">
-import { useRouter } from "vue-router";
-const router = useRouter();
+import { useRouter } from 'vue-router'
+const router = useRouter()
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>

@@ -15,7 +15,7 @@
             :unique-opened="accordion"
             :collapse-transition="false"
           >
-            <SubMenu :menu-list="menuList" />
+            <sub-menu :menu-list="menuList" />
           </el-menu>
         </el-scrollbar>
       </div>
@@ -25,32 +25,35 @@
         <ToolBarLeft />
         <ToolBarRight />
       </el-header>
-      <Main />
+      <MainContainer />
     </el-container>
   </el-container>
 </template>
 
 <script setup lang="ts" name="layoutVertical">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/modules/auth";
-import { useGlobalStore } from "@/stores/modules/global";
-import Main from "@/layouts/components/Main/index.vue";
-import ToolBarLeft from "@/layouts/components/Header/ToolBarLeft.vue";
-import ToolBarRight from "@/layouts/components/Header/ToolBarRight.vue";
-import SubMenu from "@/layouts/components/Menu/SubMenu.vue";
+defineOptions({
+  name: 'LayoutVertical',
+})
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/modules/auth'
+import { useGlobalStore } from '@/stores/modules/global'
+import MainContainer from '@/layouts/components/Main/index.vue'
+import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
+import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
+import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
 
-const title = import.meta.env.VITE_GLOB_APP_TITLE;
+const title = import.meta.env.VITE_GLOB_APP_TITLE
 
-const route = useRoute();
-const authStore = useAuthStore();
-const globalStore = useGlobalStore();
-const accordion = computed(() => globalStore.accordion);
-const isCollapse = computed(() => globalStore.isCollapse);
-const menuList = computed(() => authStore.showMenuListGet);
-const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string);
+const route = useRoute()
+const authStore = useAuthStore()
+const globalStore = useGlobalStore()
+const accordion = computed(() => globalStore.accordion)
+const isCollapse = computed(() => globalStore.isCollapse)
+const menuList = computed(() => authStore.showMenuListGet)
+const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string)
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use './index';
 </style>
