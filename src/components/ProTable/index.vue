@@ -44,7 +44,7 @@
     <!-- 表格主体 -->
     <el-table
       v-bind="$attrs"
-      :id="uuid"
+      :id="pageId"
       ref="tableRef"
       :data="processTableData"
       :border="border"
@@ -120,7 +120,7 @@ import { useTable } from '@/hooks/useTable'
 import { useSelection } from '@/hooks/useSelection'
 import type { ColumnProps, TypeProps, ProTableProps } from '@/components/ProTable/interface'
 import { Refresh, Operation, Search } from '@element-plus/icons-vue'
-import { generateUUID, handleProp } from '@/utils'
+import { handleProp } from '@/utils'
 import SearchForm from '@/components/SearchForm/index.vue'
 import Pagination from './components/Pagination.vue'
 import ColSetting from './components/ColSetting.vue'
@@ -139,11 +139,14 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 })
 
+if (!props.pageAuthId) {
+  throw new Error('请配置 [pageAuthId]')
+}
+
+const pageId = computed(() => `id-${props.pageAuthId.replaceAll(':', '_')}`)
+
 // table 实例
 const tableRef = ref<InstanceType<typeof ElTable>>()
-
-// 生成组件唯一id
-const uuid = ref('id-' + generateUUID())
 
 // column 列类型
 const columnTypes: TypeProps[] = ['selection', 'radio', 'index', 'expand', 'sort']
@@ -288,7 +291,7 @@ const _reset = () => {
 
 // 表格拖拽排序
 const dragSort = () => {
-  const tbody = document.querySelector(`#${uuid.value} tbody`) as HTMLElement
+  const tbody = document.querySelector(`#${pageId.value} tbody`) as HTMLElement
   Sortable.create(tbody, {
     handle: '.move',
     animation: 300,
@@ -300,7 +303,7 @@ const dragSort = () => {
   })
 }
 
-// 暴露给父组件的参数和方法 (外部需要什么，都可以从这里暴露出去)
+// 暴露给父组件的参数和方法
 defineExpose({
   element: tableRef,
   tableData: processTableData,
@@ -312,7 +315,6 @@ defineExpose({
   selectedList,
   selectedListIds,
 
-  // 下面为 function
   getTableList,
   search,
   reset,

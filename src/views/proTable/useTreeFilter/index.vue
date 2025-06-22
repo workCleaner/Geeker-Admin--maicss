@@ -10,6 +10,7 @@
     <div class="table-box">
       <ProTable
         ref="proTable"
+        page-auth-id="pro-table:use-tree-filter"
         :columns="columns"
         :request-api="getUserList"
         :init-param="initParam"

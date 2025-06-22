@@ -2,6 +2,7 @@
   <div class="table-box">
     <ProTable
       ref="proTable"
+      page-auth-id="system:user"
       :columns="columns"
       :request-api="getTableList"
       :init-param="initParam"

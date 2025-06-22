@@ -85,6 +85,7 @@ export interface ColumnProps<T = any>
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>
 
 export interface ProTableProps<Q = any, I = any> {
+  pageAuthId: string
   columns: ColumnProps<I>[] // 列配置项  ==> 必传
   data?: I[] // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi?: (_params: Q) => Promise<ResultPage<I>> // 请求表格数据的 api ==> 非必传

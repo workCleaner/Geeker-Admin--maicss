@@ -8,18 +8,10 @@ export interface Pageable {
 export interface StateProps {
   tableData: any[]
   pageable: Pageable
-  searchParam: {
-    [key: string]: any
-  }
-  searchInitParam: {
-    [key: string]: any
-  }
-  totalParam: {
-    [key: string]: any
-  }
-  icon?: {
-    [key: string]: any
-  }
+  searchParam: IObject
+  searchInitParam: IObject
+  totalParam: IObject
+  icon?: IObject
 }
 
 /**
@@ -80,7 +72,7 @@ export const useTable = (
     try {
       // 先把初始化参数和分页参数放到总参数里面
       Object.assign(state.totalParam, initParam, isPageable ? pageParam.value : {})
-      let { data } = await api({ ...state.searchInitParam, ...state.totalParam })
+      let data = await api({ ...state.searchInitParam, ...state.totalParam })
       dataCallBack && (data = dataCallBack(data))
       state.tableData = isPageable ? data.list : data
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
@@ -88,7 +80,11 @@ export const useTable = (
         state.pageable.total = data.total
       }
     } catch (error) {
-      requestError && requestError(error)
+      if (requestError) {
+        requestError(error)
+      } else {
+        throw new Error(error as any)
+      }
     }
   }
 

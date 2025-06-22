@@ -50,7 +50,6 @@
 <script setup lang="ts">
 defineOptions({ name: 'UploadImg' })
 import { ref, computed, inject } from 'vue'
-import { generateUUID } from '@/utils'
 import { ElNotification, formContextKey, formItemContextKey } from 'element-plus'
 import type { UploadProps, UploadRequestOptions } from 'element-plus'
 
@@ -79,7 +78,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 })
 
 // 生成组件唯一id
-const uuid = ref('id-' + generateUUID())
+const uuid = ref('id-' + crypto.randomUUID())
 
 // 查看图片
 const imgViewVisible = ref(false)
