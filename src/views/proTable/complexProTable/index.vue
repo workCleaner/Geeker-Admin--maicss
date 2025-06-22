@@ -2,6 +2,7 @@
   <div class="table-box">
     <ProTable
       ref="proTable"
+      page-auth-id="pro-table:complex-pro-table"
       title="用户列表"
       highlight-current-row
       :columns="columns"

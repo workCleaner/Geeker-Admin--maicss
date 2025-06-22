@@ -10,6 +10,7 @@
     <div class="table-box">
       <ProTable
         ref="proTable"
+        page-auth-id="pro-table:tre-pro-table"
         row-key="id"
         :indent="20"
         :columns="columns"
