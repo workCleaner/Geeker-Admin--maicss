@@ -14,7 +14,6 @@ Geeker-Admin 一款基于 Vue3.4、TypeScript、Vite5、Pinia、Element-Plus 开
 
 ### 代码仓库 ⭐
 
-- Gitee：https://gitee.com/Geeker-Admin/Geeker-Admin
 - GitHub：https://github.com/Geeker-Admin/Geeker-Admin
 
 ### 项目文档 📚
@@ -42,8 +41,6 @@ Geeker-Admin 一款基于 Vue3.4、TypeScript、Vite5、Pinia、Element-Plus 开
 - **Clone：**
 
 ```text
-# Gitee
-git clone https://gitee.com/Geeker-Admin/Geeker-Admin.git
 # GitHub
 git clone https://github.com/Geeker-Admin/Geeker-Admin.git
 ```
@@ -181,7 +178,7 @@ Geeker-Admin
 
 | ![IE](https://i.imgtg.com/2023/04/11/8z7ot.png) | ![Edge](https://i.imgtg.com/2023/04/11/8zr3p.png) | ![Firefox](https://i.imgtg.com/2023/04/11/8zKiU.png) | ![Chrome](https://i.imgtg.com/2023/04/11/8zNrx.png) | ![Safari](https://i.imgtg.com/2023/04/11/8zeGj.png) |
 | :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
-|                   <span style="color: red">not support</span>                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
+|   <span style="color: red">not support</span>   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
 
 ### 项目后台接口 🧩
 

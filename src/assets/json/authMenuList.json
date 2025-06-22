@@ -955,27 +955,13 @@
           }
         },
         {
-          "path": "/link/gitee",
-          "name": "gitee",
-          "component": "/link/gitee/index",
-          "meta": {
-            "icon": "Menu",
-            "title": "Gitee 仓库",
-            "isLink": "https://gitee.com/HalseySpicy/Geeker-Admin",
-            "isHide": false,
-            "isFull": false,
-            "isAffix": false,
-            "isKeepAlive": true
-          }
-        },
-        {
           "path": "/link/github",
           "name": "github",
           "component": "/link/github/index",
           "meta": {
             "icon": "Menu",
             "title": "GitHub 仓库",
-            "isLink": "https://github.com/HalseySpicy/Geeker-Admin",
+            "isLink": "https://github.com/Geeker-Admin/Geeker-Admin",
             "isHide": false,
             "isFull": false,
             "isAffix": false,
@@ -989,7 +975,7 @@
           "meta": {
             "icon": "Menu",
             "title": "项目文档",
-            "isLink": "https://docs.spicyboy.cn",
+            "isLink": "https://maicss.com/geek-admin/",
             "isHide": false,
             "isFull": false,
             "isAffix": false,
