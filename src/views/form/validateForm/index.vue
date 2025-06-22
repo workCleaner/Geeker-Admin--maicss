@@ -44,7 +44,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="dynamicForm">
+<script setup lang="ts">
+defineOptions({ name: 'DynamicForm' })
 import { reactive, ref } from 'vue'
 import { checkPhoneNumber } from '@/utils/eleValidate'
 import type { FormInstance, FormRules } from 'element-plus'

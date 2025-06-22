@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="waterChart">
+<script setup lang="ts">
+defineOptions({ name: 'WaterChart' })
 import type { ECOption } from '@/components/ECharts/config'
 import echarts from '@/components/ECharts/config'
 import ECharts from '@/components/ECharts/index.vue'

@@ -36,7 +36,7 @@
   </ElContainer>
 </template>
 
-<script setup lang="ts" name="layoutClassic">
+<script setup lang="ts">
 defineOptions({
   name: 'LayoutClassic',
 })

@@ -58,7 +58,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="about">
+<script setup lang="ts">
+defineOptions({ name: 'About' })
 const { pkg, lastBuildTime } = __APP_INFO__
 const { dependencies, devDependencies, version } = pkg
 </script>

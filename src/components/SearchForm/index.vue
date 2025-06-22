@@ -32,7 +32,8 @@
     </el-form>
   </div>
 </template>
-<script setup lang="ts" name="SearchForm">
+<script setup lang="ts">
+defineOptions({ name: 'SearchForm' })
 import { computed, ref } from 'vue'
 import type { ColumnProps } from '@/components/ProTable/interface'
 import type { BreakPoint } from '@/components/Grid/interface'

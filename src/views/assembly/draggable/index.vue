@@ -15,7 +15,8 @@
   </draggable>
 </template>
 
-<script setup lang="ts" name="draggable">
+<script setup lang="ts">
+defineOptions({ name: 'Draggable' })
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
 

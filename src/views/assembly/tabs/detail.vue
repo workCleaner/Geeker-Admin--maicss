@@ -6,7 +6,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="tabsDetail">
+<script setup lang="ts">
+defineOptions({ name: 'TabsDetail' })
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTabsStore } from '@/stores/modules/tabs'

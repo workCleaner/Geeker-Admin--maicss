@@ -19,7 +19,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="WangEditor">
+<script setup lang="ts">
+defineOptions({ name: 'WangEditor' })
 import { nextTick, computed, inject, shallowRef, onBeforeUnmount } from 'vue'
 import type { IToolbarConfig, IEditorConfig } from '@wangeditor/editor'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'

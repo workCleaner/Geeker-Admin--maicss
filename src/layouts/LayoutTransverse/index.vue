@@ -39,7 +39,7 @@
   </el-container>
 </template>
 
-<script setup lang="ts" name="layoutTransverse">
+<script setup lang="ts">
 defineOptions({
   name: 'LayoutTransverse',
 })
@@ -49,6 +49,7 @@ import { useRoute, useRouter } from 'vue-router'
 import MainContainer from '@/layouts/components/Main/index.vue'
 import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
 import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
+import type { MenuOptions } from '@/api/modules/menu'
 
 const title = import.meta.env.VITE_GLOB_APP_TITLE
 
@@ -58,7 +59,7 @@ const authStore = useAuthStore()
 const menuList = computed(() => authStore.showMenuListGet)
 const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string)
 
-const handleClickMenu = (subItem: Menu.MenuOptions) => {
+const handleClickMenu = (subItem: MenuOptions) => {
   if (subItem.meta.isLink) return window.open(subItem.meta.isLink, '_blank')
   router.push(subItem.path)
 }

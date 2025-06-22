@@ -45,7 +45,8 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts" name="ImportExcel">
+<script setup lang="ts">
+defineOptions({ name: 'ImportExcel' })
 import { ref } from 'vue'
 import { useDownload } from '@/hooks/useDownload'
 import { Download } from '@element-plus/icons-vue'

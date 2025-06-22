@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="columnChart">
+<script setup lang="ts">
+defineOptions({ name: 'ColumnChart' })
 import type { ECOption } from '@/components/ECharts/config'
 import ECharts from '@/components/ECharts/index.vue'
 

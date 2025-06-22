@@ -42,13 +42,14 @@ import { Search } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useRouter } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
+import type { MenuOptions } from '@/api/modules/menu'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const menuList = computed(() => authStore.flatMenuListGet.filter(item => !item.meta.isHide))
 
 const activePath = ref('')
-const mouseoverMenuItem = (menu: Menu.MenuOptions) => {
+const mouseoverMenuItem = (menu: MenuOptions) => {
   activePath.value = menu.path
 }
 
@@ -73,7 +74,7 @@ const handleOpen = () => {
   })
 }
 
-const searchList = ref<Menu.MenuOptions[]>([])
+const searchList = ref<MenuOptions[]>([])
 const updateSearchList = () => {
   searchList.value = searchMenu.value
     ? menuList.value.filter(

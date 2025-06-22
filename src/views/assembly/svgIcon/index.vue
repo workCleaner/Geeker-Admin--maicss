@@ -28,7 +28,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="svgIcon">
+<script setup lang="ts">
+defineOptions({ name: 'SvgIcon' })
 import SvgIcon from '@/components/SvgIcon/index.vue'
 </script>
 

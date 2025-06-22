@@ -48,7 +48,7 @@
   </ElContainer>
 </template>
 
-<script setup lang="ts" name="layoutColumns">
+<script setup lang="ts">
 defineOptions({
   name: 'LayoutColumns',
 })
@@ -60,6 +60,7 @@ import MainContainer from '@/layouts/components/Main/index.vue'
 import ToolBarLeft from '@/layouts/components/Header/ToolBarLeft.vue'
 import ToolBarRight from '@/layouts/components/Header/ToolBarRight.vue'
 import SubMenu from '@/layouts/components/Menu/SubMenu.vue'
+import type { MenuOptions } from '@/api/modules/menu'
 
 const title = import.meta.env.VITE_GLOB_APP_TITLE
 
@@ -72,7 +73,7 @@ const isCollapse = computed(() => globalStore.isCollapse)
 const menuList = computed(() => authStore.showMenuListGet)
 const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string)
 
-const subMenuList = ref<Menu.MenuOptions[]>([])
+const subMenuList = ref<MenuOptions[]>([])
 const splitActive = ref('')
 watch(
   () => [menuList, route],
@@ -80,7 +81,7 @@ watch(
     // 当前菜单没有数据直接 return
     if (!menuList.value.length) return
     splitActive.value = route.path
-    const menuItem = menuList.value.filter((item: Menu.MenuOptions) => {
+    const menuItem = menuList.value.filter((item: MenuOptions) => {
       return route.path === item.path || `/${route.path.split('/')[1]}` === item.path
     })
     if (menuItem[0].children?.length) return (subMenuList.value = menuItem[0].children)
@@ -93,7 +94,7 @@ watch(
 )
 
 // change SubMenu
-const changeSubMenu = (item: Menu.MenuOptions) => {
+const changeSubMenu = (item: MenuOptions) => {
   splitActive.value = item.path
   if (item.children?.length) return (subMenuList.value = item.children)
   subMenuList.value = []

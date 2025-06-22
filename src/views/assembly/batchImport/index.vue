@@ -17,7 +17,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="batchImport">
+<script setup lang="ts">
+defineOptions({ name: 'BatchImport' })
 import { ref } from 'vue'
 import { exportUserInfo, BatchAddUser } from '@/api/modules/user'
 import { Upload } from '@element-plus/icons-vue'

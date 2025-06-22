@@ -12,7 +12,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="guide">
+<script setup lang="ts">
+defineOptions({ name: 'Guide' })
 import { driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
 

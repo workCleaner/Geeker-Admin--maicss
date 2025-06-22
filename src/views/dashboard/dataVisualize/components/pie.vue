@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="pie">
+<script setup lang="ts">
+defineOptions({ name: 'Pie' })
 import type { ECOption } from '@/components/ECharts/config'
 import ECharts from '@/components/ECharts/index.vue'
 

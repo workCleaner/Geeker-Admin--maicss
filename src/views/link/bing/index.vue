@@ -4,7 +4,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="bing"></script>
+<script setup lang="ts">
+defineOptions({ name: 'Bing' })
+</script>
 
 <style scoped lang="scss">
 @use './index';

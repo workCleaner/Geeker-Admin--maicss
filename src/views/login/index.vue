@@ -16,7 +16,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="login">
+<script setup lang="ts">
+defineOptions({ name: 'Login' })
 import LoginForm from './components/LoginForm.vue'
 import SwitchDark from '@/components/SwitchDark/index.vue'
 </script>

@@ -35,7 +35,8 @@
     </div>
   </div>
 </template>
-<script setup lang="ts" name="useTreeFilter">
+<script setup lang="ts">
+defineOptions({ name: 'UseTreeFilter' })
 import { ref, reactive } from 'vue'
 import type { ResUserList } from '@/api/modules/user'
 import { useRouter } from 'vue-router'

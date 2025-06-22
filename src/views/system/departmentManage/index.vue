@@ -4,4 +4,6 @@
   </div>
 </template>
 
-<script setup lang="ts" name="departmentManage"></script>
+<script setup lang="ts">
+defineOptions({ name: 'DepartmentManage' })
+</script>

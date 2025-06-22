@@ -24,12 +24,13 @@
 defineOptions({
   name: 'SubMenu',
 })
+import type { MenuOptions } from '@/api/modules/menu'
 import { useRouter } from 'vue-router'
 
-defineProps<{ menuList: Menu.MenuOptions[] }>()
+defineProps<{ menuList: MenuOptions[] }>()
 
 const router = useRouter()
-const handleClickMenu = (subItem: Menu.MenuOptions) => {
+const handleClickMenu = (subItem: MenuOptions) => {
   if (subItem.meta.isLink) return window.open(subItem.meta.isLink, '_blank')
   router.push(subItem.path)
 }

@@ -44,7 +44,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="authButton">
+<script setup lang="ts">
+defineOptions({ name: 'AuthButton' })
 import { useAuthButtons } from '@/hooks/useAuthButtons'
 import { CirclePlus, Delete, EditPen, Download, Upload } from '@element-plus/icons-vue'
 

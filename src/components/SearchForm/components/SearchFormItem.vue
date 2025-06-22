@@ -22,7 +22,8 @@
   </component>
 </template>
 
-<script setup lang="ts" name="SearchFormItem">
+<script setup lang="ts">
+defineOptions({ name: 'SearchFormItem' })
 import { computed, inject, ref } from 'vue'
 import { handleProp } from '@/utils'
 import type { ColumnProps } from '@/components/ProTable/interface'

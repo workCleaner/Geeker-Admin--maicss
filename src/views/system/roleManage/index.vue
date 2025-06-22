@@ -4,4 +4,6 @@
   </div>
 </template>
 
-<script setup lang="ts" name="roleManage"></script>
+<script setup lang="ts">
+defineOptions({ name: 'RoleManage' })
+</script>

@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Grid">
+<script setup lang="ts">
+defineOptions({ name: 'Grid' })
 import type { VNodeArrayChildren, VNode } from 'vue'
 import { ref, watch, useSlots, computed, provide, onBeforeMount, onMounted, onActivated } from 'vue'
 import { useEventListener } from '@vueuse/core'

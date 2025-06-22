@@ -13,7 +13,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="selectIcon">
+<script setup lang="ts">
+defineOptions({ name: 'SelectIcon' })
 import { ref } from 'vue'
 import SelectIcon from '@/components/SelectIcon/index.vue'
 const iconValue = ref('')

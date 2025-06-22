@@ -31,7 +31,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="wangEditor">
+<script setup lang="ts">
+defineOptions({ name: 'WangEditor' })
 import { ref } from 'vue'
 import WangEditor from '@/components/WangEditor/index.vue'
 

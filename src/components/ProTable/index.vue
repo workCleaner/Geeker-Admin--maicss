@@ -109,10 +109,11 @@
     </slot>
   </div>
   <!-- 列设置 -->
-  <col-setting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting" />
+  <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting" />
 </template>
 
-<script setup lang="ts" name="ProTable">
+<script setup lang="ts">
+defineOptions({ name: 'ProTable' })
 import { ref, watch, provide, onMounted, unref, computed, reactive } from 'vue'
 import { ElTable } from 'element-plus'
 import { useTable } from '@/hooks/useTable'
@@ -122,7 +123,7 @@ import { Refresh, Operation, Search } from '@element-plus/icons-vue'
 import { generateUUID, handleProp } from '@/utils'
 import SearchForm from '@/components/SearchForm/index.vue'
 import Pagination from './components/Pagination.vue'
-// import ColSetting from './components/ColSetting.vue'
+import ColSetting from './components/ColSetting.vue'
 import TableColumn from './components/TableColumn'
 import Sortable from 'sortablejs'
 

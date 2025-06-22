@@ -4,7 +4,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="watermarkDirect"></script>
+<script setup lang="ts">
+defineOptions({ name: 'WatermarkDirect' })
+</script>
 
 <style scoped lang="scss">
 @use './index';

@@ -4,4 +4,6 @@
   </div>
 </template>
 
-<script setup lang="ts" name="systemLog"></script>
+<script setup lang="ts">
+defineOptions({ name: 'SystemLog' })
+</script>

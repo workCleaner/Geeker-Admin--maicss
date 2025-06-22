@@ -169,7 +169,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="uploadFile">
+<script setup lang="ts">
+defineOptions({ name: 'UploadFile' })
 import { ref, reactive } from 'vue'
 import type { FormInstance } from 'element-plus'
 import UploadImg from '@/components/Upload/Img.vue'

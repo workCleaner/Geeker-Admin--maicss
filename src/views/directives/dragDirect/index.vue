@@ -5,7 +5,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="dragDirect"></script>
+<script setup lang="ts">
+defineOptions({ name: 'DragDirect' })
+</script>
 
 <style scoped lang="scss">
 @use './index';

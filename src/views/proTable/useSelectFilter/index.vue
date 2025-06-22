@@ -39,7 +39,8 @@
     </div>
   </div>
 </template>
-<script setup lang="ts" name="useSelectFilter">
+<script setup lang="ts">
+defineOptions({ name: 'UseSelectFilter' })
 import { ref, reactive, onMounted, watch } from 'vue'
 import type { ResUserList } from '@/api/modules/user'
 import { ElMessage, ElMessageBox } from 'element-plus'

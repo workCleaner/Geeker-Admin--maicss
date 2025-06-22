@@ -30,7 +30,7 @@
   </el-container>
 </template>
 
-<script setup lang="ts" name="layoutVertical">
+<script setup lang="ts">
 defineOptions({
   name: 'LayoutVertical',
 })

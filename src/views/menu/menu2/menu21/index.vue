@@ -5,7 +5,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="menu21">
+<script setup lang="ts">
+defineOptions({ name: 'Menu21' })
 import { ref } from 'vue'
 const value = ref<string>('')
 </script>

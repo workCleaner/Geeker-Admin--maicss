@@ -10,7 +10,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="github"></script>
+<script setup lang="ts">
+defineOptions({ name: 'Github' })
+</script>
 
 <style scoped lang="scss">
 @use './index';

@@ -45,7 +45,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="basicForm">
+<script setup lang="ts">
+defineOptions({ name: 'BasicForm' })
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
 

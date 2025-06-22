@@ -20,7 +20,8 @@
   </div>
 </template>
 
-<script setup lang="ts" name="menuMange">
+<script setup lang="ts">
+defineOptions({ name: 'MenuMange' })
 import { ref } from 'vue'
 import type { ColumnProps } from '@/components/ProTable/interface'
 import { Delete, EditPen, CirclePlus } from '@element-plus/icons-vue'

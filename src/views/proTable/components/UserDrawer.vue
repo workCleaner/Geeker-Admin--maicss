@@ -52,7 +52,8 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts" name="UserDrawer">
+<script setup lang="ts">
+defineOptions({ name: 'UserDrawer' })
 import { ref, reactive } from 'vue'
 import { genderType } from '@/utils/dict'
 import type { FormInstance } from 'element-plus'

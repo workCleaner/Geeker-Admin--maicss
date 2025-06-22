@@ -6,7 +6,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Loading"></script>
+<script setup lang="ts">
+defineOptions({ name: 'Loading' })
+</script>
 
 <style scoped lang="scss">
 @use './index';

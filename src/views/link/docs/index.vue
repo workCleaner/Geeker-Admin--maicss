@@ -6,7 +6,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="docs"></script>
+<script setup lang="ts">
+defineOptions({ name: 'Docs' })
+</script>
 
 <style scoped lang="scss">
 @use './index';
