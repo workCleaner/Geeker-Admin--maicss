@@ -33,7 +33,7 @@ declare global {
     VITE_PUBLIC_PATH: string
     VITE_API_URL: string
     VITE_PROXY: [string, string][]
-    VITE_CODEINSPECTOR: boolean
+    VITE_CODE_INSPECTOR: boolean
   }
 
   /* __APP_INFO__ */
@@ -81,8 +81,8 @@ declare global {
   // 分页响应参数
   interface ResultPage<T> {
     list: T[]
-    pageNum: number
-    pageSize: number
+    pageNum?: number
+    pageSize?: number
     total: number
   }
 
