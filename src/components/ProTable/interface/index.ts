@@ -2,6 +2,7 @@ import type { VNode, ComponentPublicInstance, Ref } from 'vue'
 import type { BreakPoint, Responsive } from '@/components/Grid/interface'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type ProTable from '@/components/ProTable/index.vue'
+import type { ColProps, DialogProps, DrawerProps, FormItemRule, FormProps } from 'element-plus'
 
 export interface EnumProps {
   label?: string // 选项框显示的文字
@@ -99,4 +100,64 @@ export interface ProTableProps<Q = any, I = any> {
   toolButton?: ('refresh' | 'setting' | 'search')[] | boolean // 是否显示表格功能按钮 ==> 非必传（默认为true）
   rowKey?: string // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   searchCol?: number | Record<BreakPoint, number> // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+}
+
+type DateComponent = 'date-picker' | 'time-picker' | 'time-select' | 'custom-tag' | 'input-tag'
+type InputComponent = 'input' | 'select' | 'input-number' | 'cascader' | 'tree-select'
+type OtherComponent = 'text' | 'radio' | 'checkbox' | 'switch' | 'icon-select' | 'custom'
+
+export type IComponentType = DateComponent | InputComponent | OtherComponent
+
+export type IFormItems<T = IComponentType> = Array<{
+  // 组件类型(如input,select,radio,custom等)
+  type: T
+  // 标签提示
+  tips?: string | IObject
+  // 标签文本
+  label: string
+  // 键名
+  prop: string
+  // 组件属性
+  attrs?: IObject
+  // 组件可选项(只适用于select,radio,checkbox组件)
+  options?: Array<{ label: string; value: any; [key: string]: any }> | Ref<any[]>
+  // 验证规则
+  rules?: FormItemRule[]
+  // 初始值
+  initialValue?: any
+  // 插槽名(适用于自定义组件，设置类型为custom)
+  slotName?: string
+  // 是否隐藏
+  hidden?: boolean
+  // layout组件Col属性
+  col?: Partial<ColProps>
+  // 组件事件
+  events?: Record<string, (..._args: any) => void>
+  // 初始化数据函数扩展
+  initFn?: (_item: IObject) => void
+}>
+
+type IForm = Partial<Omit<FormProps, 'model' | 'rules'>>
+
+export interface IModalConfig<T = any> {
+  // 权限前缀(如sys:user，用于组成权限标识)，不提供则不进行权限校验
+  permPrefix?: string
+  // 标签冒号(默认：false)
+  colon?: boolean
+  // 主键名(主要用于编辑数据,默认为id)
+  pk?: string
+  // 组件类型(默认：dialog)
+  component?: 'dialog' | 'drawer'
+  // dialog组件属性
+  dialog?: Partial<Omit<DialogProps, 'modelValue'>>
+  // drawer组件属性
+  drawer?: Partial<Omit<DrawerProps, 'modelValue'>>
+  // form组件属性
+  form?: IForm
+  // 表单项
+  formItems: IFormItems<IComponentType>
+  // 提交之前处理
+  beforeSubmit?: (_data: T) => void
+  // 提交的网络请求函数(需返回promise)
+  formAction?: (_data: T) => Promise<any>
 }
