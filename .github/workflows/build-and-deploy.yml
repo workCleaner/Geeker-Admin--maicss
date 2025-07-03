@@ -59,7 +59,7 @@ jobs:
         run: pnpm lint:stylelint
 
       - name: Build project
-        run: pnpm build:pro
+        run: pnpm build
         env:
           NODE_ENV: production
 
@@ -74,7 +74,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           export VITE_REPORT=true
-          pnpm build:pro
+          pnpm build
         env:
           NODE_ENV: production
 
