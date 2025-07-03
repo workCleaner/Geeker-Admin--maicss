@@ -1,7 +1,7 @@
 import type { ProTableProps } from '@/components/ProTable/interface'
 import type { Dict, DictQuery } from '@/api/modules/dict'
 import DictAPI from '@/api/modules/dict'
-import { ElButton, ElMessage } from 'element-plus'
+import { ElButton, ElMessage, ElTag } from 'element-plus'
 import { TABLE_COLUMN_OPERATION_NAME } from '@/constants'
 
 // eslint-disable-next-line no-unused-vars
@@ -13,6 +13,8 @@ export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQu
         prop: 'name',
         search: { el: 'input' },
         label: '字典名称',
+        width: 150,
+        align: 'left',
       },
       {
         prop: 'code',
@@ -26,14 +28,16 @@ export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQu
       {
         prop: 'status',
         label: '状态',
+        width: 90,
+        render: scope => {
+          if (scope.row.parentId === 0) return '-'
+          return <ElTag type={scope.row.type as any}>{scope.row.status === 1 ? '启用' : '禁用'}</ElTag>
+        },
       },
       {
         prop: TABLE_COLUMN_OPERATION_NAME,
-        width: 150,
+        width: 200,
         fixed: 'right',
-        // buttons: [
-        //   ''
-        // ]
         render: scope => {
           return (
             <ElButton type="primary" link onClick={() => ElMessage.success('tsx button')}>
@@ -47,12 +51,6 @@ export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQu
       name: 'aa',
     },
     requestApi: DictAPI.getDictList,
-    // dataCallback: data => {
-    //   return {
-    //     list: data.list,
-    //     total: data.total,
-    //   }
-    // },
     pagination: true,
     toolButton: ['refresh', 'setting', 'search'],
     rowKey: 'id',

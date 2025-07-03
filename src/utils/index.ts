@@ -295,3 +295,48 @@ export function findItemNested(enumData: any, callValue: any, value: string, chi
     if (current[children]) return findItemNested(current[children], callValue, value, children)
   }, null)
 }
+
+/**
+ * 树形结构过滤器
+ * @param tree 树形数据 (必须包含 children 数组)
+ * @param fn 过滤条件函数
+ * @param childKey 子树的key名称
+ * @returns 过滤后的新树 (保持原始结构)
+ */
+export function treeFilter<T, K extends string = 'children'>(
+  node: TreeLike<T, K>,
+  fn: (_node: TreeLike<T, K>) => boolean,
+  childKey: K = 'children' as K
+): TreeLike<T, K> | null {
+  // 递归处理子节点
+  const children = node[childKey] ?? []
+  const filteredChildren = children
+    .map(child => treeFilter(child, fn, childKey))
+    .filter((child): child is TreeLike<T, K> => child !== null)
+
+  // 判断是否保留当前节点：自身符合条件或存在有效子节点
+  const keepNode = fn(node) || filteredChildren.length > 0
+
+  return keepNode ? { ...node, [childKey]: filteredChildren } : null
+}
+
+/**
+ * 树形结构转换器
+ * @param tree 树形数据 (必须包含 children 数组)
+ * @param fn 过滤条件函数
+ * @param childKey 子树的key名称
+ * @returns 过滤后的新树
+ */
+export function treeMap<T, R, K extends string = 'children'>(
+  tree: TreeLike<T, K>,
+  mapFn: (_node: T) => R,
+  childrenKey: K = 'children' as K
+): TreeLike<R, K> {
+  const newNode: any = { ...mapFn(tree) }
+  if (tree[childrenKey] && Array.isArray(tree[childrenKey])) {
+    newNode[childrenKey] = tree[childrenKey].map(child => treeMap(child, mapFn, childrenKey))
+  } else {
+    newNode[childrenKey] = []
+  }
+  return newNode as TreeLike<R, K>
+}

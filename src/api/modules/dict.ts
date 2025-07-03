@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import http from '@/api'
 import { SERVER_ENDPOINTS } from '@/constants'
+import { treeMap } from '@/utils'
 
 /**
  * 字典
@@ -14,6 +14,9 @@ export interface Dict {
   children?: (this & { type: string })[]
   remark?: string
   status?: 0 | 1
+  type?: string
+  value?: string
+  label?: string
 }
 
 export interface DictQuery extends RequestPage {
@@ -23,60 +26,13 @@ export interface DictQuery extends RequestPage {
 
 const DictAPI = {
   getDictList: (params: DictQuery): Promise<ResultPage<Dict>> => {
-    // return http.get<ResultPage<Dict>>(SERVER_ENDPOINTS.geeker + `/dict/list`, params)
-    const data: Dict[] = [
-      {
-        code: 'aa',
-        name: 'aa dict',
-        remark: 'comment of a',
-        status: 0,
-        parentId: 0,
-        id: 1,
-        children: [
-          {
-            code: 'a1',
-            id: 10,
-            parentId: 1,
-            name: 'a1-v',
-            type: 'info',
-          },
-          {
-            code: 'a2',
-            id: 11,
-            parentId: 1,
-            name: 'a2-v',
-            type: 'info',
-          },
-        ],
-      },
-      {
-        code: 'bb',
-        name: 'bb dict',
-        remark: 'comment of a',
-        status: 0,
-        parentId: 0,
-        id: 2,
-        children: [
-          {
-            code: 'b1',
-            parentId: 2,
-            id: 21,
-            name: 'b1-v',
-            type: 'info',
-          },
-          {
-            code: 'b2',
-            parentId: 2,
-            id: 22,
-            name: 'b2-v',
-            type: 'info',
-          },
-        ],
-      },
-    ]
-    return Promise.resolve({
-      list: data,
-      total: data.length,
+    return http.get<ResultPage<any>>(SERVER_ENDPOINTS.api + `/dict/page`, params).then(res => {
+      return {
+        list: res.list.map(node =>
+          treeMap(node, item => ({ code: item.value, name: item.label, remark: item.type, ...item }))
+        ),
+        total: res.total,
+      }
     })
   },
 
