@@ -1,6 +1,7 @@
 <template>
   <el-dropdown trigger="click">
     <div class="avatar">
+      <span class="username">{{ username }}</span>
       <img src="@/assets/images/avatar.gif" alt="avatar" />
     </div>
     <template #dropdown>
@@ -27,7 +28,7 @@
 defineOptions({
   name: 'Avatar',
 })
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { LOGIN_URL } from '@/config'
 import { useRouter } from 'vue-router'
 import { logoutApi } from '@/api/modules/login'
@@ -38,6 +39,7 @@ import PasswordDialog from './PasswordDialog.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
+const username = computed(() => userStore.userInfo.name)
 
 // 退出登录
 const logout = () => {
@@ -69,14 +71,20 @@ const openDialog = (ref: string) => {
 
 <style scoped lang="scss">
 .avatar {
-  width: 40px;
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   cursor: pointer;
-  border-radius: 50%;
+  .username {
+    margin: 0 20px;
+    font-size: 15px;
+    color: var(--el-header-text-color);
+  }
   img {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
   }
 }
 </style>
