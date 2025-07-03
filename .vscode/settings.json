@@ -11,8 +11,10 @@
   "i18n-ally.keystyle": "nested",
   "i18n-ally.sourceLanguage": "zh",
   "i18n-ally.displayLanguage": "zh",
-  "i18n-ally.enabledFrameworks": ["vue", "vue-sfc"],
-  "i18n-ally.namespace": true,
+  "i18n-ally.enabledFrameworks": ["vue"],
+  "i18n-ally.namespace": false, // 你的项目没有用 namespace，建议设为 false
+  "i18n-ally.pathMatcher": "{locale}.ts", // 明确指定 ts 文件
+  "i18n-ally.enabledParsers": ["ts"], // 强制启用 ts 解析
   "stylelint.enable": true,
   "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass", "html"],
   "files.eol": "\n",
