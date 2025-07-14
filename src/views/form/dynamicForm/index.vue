@@ -33,13 +33,15 @@
       >
         <el-input v-model="domain.value">
           <template #append>
-            <el-button type="danger" plain class="mt-2" @click.prevent="removeDomain(domain)"> Delete </el-button>
+            <el-button type="danger" plain @click.prevent="removeDomain(domain)">
+              {{ $t('common.delete') }}
+            </el-button>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(formRef)"> Submit </el-button>
-        <el-button @click="resetForm(formRef)"> Reset </el-button>
+        <el-button type="primary" @click="submitForm(formRef)"> {{ $t('common.submit') }} </el-button>
+        <el-button @click="resetForm(formRef)"> {{ $t('common.reset') }} </el-button>
       </el-form-item>
     </el-form>
   </div>

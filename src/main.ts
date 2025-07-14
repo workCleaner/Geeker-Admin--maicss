@@ -27,7 +27,7 @@ import directives from '@/directives/index'
 // vue Router
 import router from '@/routers'
 // vue i18n
-import I18n from '@/languages/index'
+import I18n from '@/locales/index'
 // pinia store
 import pinia from '@/stores'
 // errorHandler
