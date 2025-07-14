@@ -37,6 +37,7 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "lint:lint-staged": "lint-staged",
     "prepare": "husky",
+    "preinstall": "npx only-allow pnpm && git config core.ignorecase false",
     "release": "standard-version",
     "commit": "git add -A && czg && git push"
   },
@@ -75,8 +76,8 @@
     "@vitejs/plugin-vue-jsx": "^5.0.1",
     "autoprefixer": "^10.4.21",
     "code-inspector-plugin": "^0.20.15",
-    "cz-git": "1.11.2",
-    "czg": "^1.11.1",
+    "cz-git": "1.12.0",
+    "czg": "^1.12.0",
     "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",

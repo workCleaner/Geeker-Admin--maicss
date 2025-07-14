@@ -11,6 +11,7 @@
     "vue.volar",
     "bradlc.vscode-tailwindcss",
     "lokalise.i18n-ally",
-    "gruntfuggly.todo-tree"
+    "gruntfuggly.todo-tree",
+    "antfu.unocss"
   ]
 }
