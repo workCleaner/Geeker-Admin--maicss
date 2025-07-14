@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card mb10">
+    <div class="card mb-2.5">
       <h4 class="title">简介</h4>
       <span class="text">
         <el-link type="primary" href="https://maicss.com/geek-admin/" target="_blank">Geeker-Admin</el-link>
@@ -12,7 +12,7 @@
         在一定程度上提高您的开发效率。另外本项目还封装了一些常用组件、Hooks、指令、动态路由、按钮级别权限控制等功能。
       </span>
     </div>
-    <div class="card mb10">
+    <div class="card mb-2.5">
       <h4 class="title">项目信息</h4>
       <el-descriptions :column="2" border>
         <el-descriptions-item label="版本号" label-align="left">
@@ -32,7 +32,7 @@
         </el-descriptions-item>
       </el-descriptions>
     </div>
-    <div class="card mb10">
+    <div class="card mb-2.5">
       <h4 class="title">生产环境依赖</h4>
       <el-descriptions :column="3" border>
         <el-descriptions-item v-for="(value, key) in dependencies" :key="key" width="400px" :label="key">

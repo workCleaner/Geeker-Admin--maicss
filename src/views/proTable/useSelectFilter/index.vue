@@ -9,7 +9,7 @@
       @change="changeTreeFilter"
     />
     <div class="table-box">
-      <div class="card mb10 pt0 pb0">
+      <div class="card mb-2.5 pt-0 pb-0">
         <select-filter :data="selectFilterData" :default-values="selectFilterValues" @change="changeSelectFilter" />
       </div>
       <pro-table

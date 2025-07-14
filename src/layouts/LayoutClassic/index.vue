@@ -3,7 +3,7 @@
   <ElContainer class="layout">
     <ElHeader>
       <div class="header-lf mask-image">
-        <div class="logo flx-center">
+        <div class="logo flex justify-center items-center">
           <img class="logo-img" src="@/assets/images/logo.svg" alt="logo" />
           <span class="logo-text">{{ title }}</span>
         </div>

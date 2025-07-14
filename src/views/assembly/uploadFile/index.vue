@@ -81,7 +81,7 @@
           type="warning"
           effect="dark"
           :closable="false"
-          class="mb20"
+          class="mb-5"
         />
         <el-form ref="ruleFormRef" label-width="100px" label-suffix=" :" :rules="rules" :model="fromModel">
           <el-form-item label="用户头像" prop="avatar">
@@ -129,7 +129,7 @@
           type="warning"
           effect="dark"
           :closable="false"
-          class="mb20"
+          class="mb-5"
         />
         <el-form label-width="100px" label-suffix=" :" disabled :model="fromModel1">
           <el-form-item label="用户头像" prop="avatar">

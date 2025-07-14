@@ -11,6 +11,7 @@ import viteCompression from 'vite-plugin-compression'
 import NextDevTools from 'vite-plugin-vue-devtools'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
 import devtoolsJson from 'vite-plugin-devtools-json'
+import UnoCSS from 'unocss/vite'
 
 /**
  * 创建 vite 插件
@@ -22,6 +23,8 @@ export const createVitePlugins = (viteEnv: ViteEnv): (PluginOption | PluginOptio
     vue(),
     // vue 可以使用 jsx/tsx 语法
     vueJsx(),
+    // unocss
+    UnoCSS(),
     // chrome dev tools
     devtoolsJson(),
     // devTools

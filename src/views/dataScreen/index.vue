@@ -59,7 +59,7 @@
 							<div class="dataScreen-alarm">
 								<div class="map-item" v-for="item in alarmData" :key="item.id">
 									<img src="./images/dataScreen-alarm.png" alt="" />
-									<span class="map-alarm sle">{{ item.label }} 预警：{{ item.warnMsg }}</span>
+									<span class="map-alarm truncate">{{ item.label }} 预警：{{ item.warnMsg }}</span>
 								</div>
 							</div>
 						</vue3-seamless-scroll> -->

@@ -71,7 +71,7 @@
       </span>
       <el-switch v-model="asideInverted" @change="setAsideTheme" />
     </div>
-    <div class="theme-item mb50">
+    <div class="theme-item mb-12">
       <span>
         头部反转色
         <el-tooltip effect="dark" content="头部颜色变为深色模式" placement="top">
@@ -98,7 +98,7 @@
       <span>灰色模式</span>
       <el-switch v-model="isGrey" @change="changeGreyOrWeak('grey', !!$event)" />
     </div>
-    <div class="theme-item mb40">
+    <div class="theme-item mb-10">
       <span>色弱模式</span>
       <el-switch v-model="isWeak" @change="changeGreyOrWeak('weak', !!$event)" />
     </div>

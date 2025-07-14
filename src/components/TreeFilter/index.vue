@@ -1,6 +1,6 @@
 <template>
   <div class="card filter">
-    <h4 v-if="title" class="title sle">
+    <h4 v-if="title" class="title truncate">
       {{ title }}
     </h4>
     <div class="search">
