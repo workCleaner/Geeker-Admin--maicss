@@ -1,9 +1,7 @@
-import { resolve } from 'path'
 import type { PluginOption } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import { visualizer } from 'rollup-plugin-visualizer'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons-ng'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import eslintPlugin from 'vite-plugin-eslint'
@@ -12,6 +10,10 @@ import NextDevTools from 'vite-plugin-vue-devtools'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
 import devtoolsJson from 'vite-plugin-devtools-json'
 import UnoCSS from 'unocss/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import Icons from 'unplugin-icons/vite'
+
+const iconsDir = './src/assets/icons/svg'
 
 /**
  * 创建 vite 插件
@@ -43,9 +45,33 @@ export const createVitePlugins = (viteEnv: ViteEnv): (PluginOption | PluginOptio
       },
     }),
     // 使用 svg 图标
-    createSvgIconsPlugin({
-      iconDirs: [resolve(process.cwd(), 'src/assets/icons')],
-      symbolId: 'icon-[dir]-[name]',
+    Icons({
+      compiler: 'vue3',
+      autoInstall: true,
+      customCollections: {
+        localSvgIcon: FileSystemIconLoader(iconsDir, svg => {
+          // const symbol = svg.includes('fill="') ? svg : svg.replace(/^<svg /, '<svg fill="currentColor" ')
+          // console.log(1111, symbol)
+          // return symbol.replace(/width="[\d.]+" height="[\d.]+"/, '')
+          return svg
+        }),
+      },
+      // todo w/h not working
+      // defaultClass: 'inline-block w-10 h-10',
+      // defaultStyle: 'width: 20px; height: 20px;',
+      // scale: 1.2,
+      // iconCustomizer: (collection, icon, props) => {
+      //   if (collection === 'mdi' && icon === 'account') {
+      //     props.width = '2em'
+      //     props.height = '2em'
+      //   }
+      // },
+      // transform(svg, collection, icon) {
+      //   // apply fill to this icon on this collection
+      //   if (collection === 'my-icons' && icon === 'account') return svg.replace(/^<svg /, '<svg fill="currentColor" ')
+
+      //   return svg
+      // },
     }),
     // vitePWA
     VITE_PWA && createVitePwa(viteEnv),

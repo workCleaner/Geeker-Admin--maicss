@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" :teleported="false">
     <div class="more-button">
-      <i :class="'iconfont icon-xiala'"></i>
+      <el-icon><ArrowDownBold /></el-icon>
     </div>
     <template #dropdown>
       <el-dropdown-menu>
@@ -38,6 +38,7 @@ import { useTabsStore } from '@/stores/modules/tabs'
 import { useGlobalStore } from '@/stores/modules/global'
 import { useKeepAliveStore } from '@/stores/modules/keepAlive'
 import { useRoute, useRouter } from 'vue-router'
+import { ArrowDownBold } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()

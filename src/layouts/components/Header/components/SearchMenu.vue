@@ -1,6 +1,6 @@
 <template>
   <div class="search-menu">
-    <i :class="'iconfont icon-sousuo'" class="toolBar-icon" @click="handleOpen"></i>
+    <hugeicons-search-01 class="cursor-pointer" @click="handleOpen" />
     <el-dialog v-model="isShowSearch" class="search-dialog" :width="600" :show-close="false" top="10vh">
       <el-input
         ref="menuInputRef"
@@ -24,7 +24,7 @@
             </el-icon>
             <span class="menu-title">{{ item.meta.title }}</span>
           </div>
-          <i :class="'iconfont icon-huiche'" class="menu-enter" @click="handleOpen"></i>
+          <mi-enter class="menu-enter cursor-pointer" @click="handleOpen" />
         </div>
       </div>
       <el-empty v-else class="mt-5 mb-5" :image-size="100" description="暂无菜单" />
@@ -43,6 +43,8 @@ import { useAuthStore } from '@/stores/modules/auth'
 import { useRouter } from 'vue-router'
 import { useDebounceFn } from '@vueuse/core'
 import type { MenuOptions } from '@/api/modules/menu'
+import HugeiconsSearch01 from '~icons/hugeicons/search-01?width=20px&height=20px'
+import MiEnter from '~icons/mi/enter?width=20px&height=20px'
 
 const router = useRouter()
 const authStore = useAuthStore()

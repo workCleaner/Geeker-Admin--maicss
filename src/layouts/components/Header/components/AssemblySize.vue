@@ -1,6 +1,6 @@
 <template>
   <el-dropdown trigger="click" @command="setAssemblySize">
-    <i :class="'iconfont icon-contentright'" class="toolBar-icon"></i>
+    <tabler-layout class="cursor-pointer" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -23,6 +23,7 @@ defineOptions({
 import { computed } from 'vue'
 import { useGlobalStore } from '@/stores/modules/global'
 import type { AssemblySizeType } from '@/stores/interface'
+import TablerLayout from '~icons/tabler/layout?width=20px&height=20px'
 
 const globalStore = useGlobalStore()
 const assemblySize = computed(() => globalStore.assemblySize)

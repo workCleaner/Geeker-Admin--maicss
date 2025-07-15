@@ -1,11 +1,12 @@
 <template>
   <div class="maximize" @click="exitMaximize">
-    <i :class="'iconfont icon-tuichu'"></i>
+    <tdesign-fullscreen-exit class="cursor-pointer absolute top-1/2 left-1/5 color-white" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useGlobalStore } from '@/stores/modules/global'
+import TdesignFullscreenExit from '~icons/tdesign/fullscreen-exit?width=20px&height=20px'
 
 const globalStore = useGlobalStore()
 const exitMaximize = () => {
@@ -27,13 +28,6 @@ const exitMaximize = () => {
   opacity: 0.9;
   &:hover {
     background-color: var(--el-color-info-dark-2);
-  }
-  .iconfont {
-    position: relative;
-    top: 46%;
-    left: 19%;
-    font-size: 14px;
-    color: #ffffff;
   }
 }
 </style>

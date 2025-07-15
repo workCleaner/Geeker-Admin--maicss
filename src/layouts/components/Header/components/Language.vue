@@ -1,6 +1,6 @@
 <template>
   <el-dropdown trigger="click" @command="changeLanguage">
-    <i :class="'iconfont icon-zhongyingwen'" class="toolBar-icon"></i>
+    <meteor-icons-language class="cursor-pointer" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
@@ -24,6 +24,7 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useGlobalStore } from '@/stores/modules/global'
 import type { LanguageType } from '@/stores/interface'
+import MeteorIconsLanguage from '~icons/meteor-icons/language?width=20px&height=20px'
 
 const i18n = useI18n()
 const globalStore = useGlobalStore()

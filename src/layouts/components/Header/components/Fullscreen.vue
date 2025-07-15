@@ -1,10 +1,10 @@
 <template>
   <div class="fullscreen">
-    <i
-      :class="['iconfont', isFullscreen ? 'icon-suoxiao' : 'icon-fangda']"
-      class="toolBar-icon"
+    <component
+      :is="isFullscreen ? MaterialSymbolsFullscreenExit : MaterialSymbolsFullscreen"
+      class="cursor-pointer"
       @click="handleFullScreen"
-    ></i>
+    />
   </div>
 </template>
 
@@ -12,6 +12,8 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import screenfull from 'screenfull'
+import MaterialSymbolsFullscreenExit from '~icons/material-symbols/fullscreen-exit?width=20px&height=20px'
+import MaterialSymbolsFullscreen from '~icons/material-symbols/fullscreen?width=20px&height=20px'
 
 const isFullscreen = ref(screenfull.isFullscreen)
 

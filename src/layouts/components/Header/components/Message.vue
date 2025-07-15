@@ -3,7 +3,7 @@
     <el-popover placement="bottom" :width="310" trigger="click">
       <template #reference>
         <el-badge :value="5" class="item">
-          <i :class="'iconfont icon-xiaoxi'" class="toolBar-icon"></i>
+          <line-md-bell class="cursor-pointer" />
         </el-badge>
       </template>
       <el-tabs v-model="activeName">
@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import LineMdBell from '~icons/line-md/bell?width=20px&height=20px'
 const activeName = ref('first')
 </script>
 
