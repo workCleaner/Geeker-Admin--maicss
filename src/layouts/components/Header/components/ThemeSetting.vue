@@ -5,10 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import mittBus from '@/utils/mittBus'
 import IconParkOutlineTheme from '~icons/icon-park-outline/theme?width=20px&height=20px'
 
 const openDrawer = () => {
-  mittBus.emit('openThemeDrawer')
+  window.dispatchEvent(new CustomEvent('openThemeDrawer'))
 }
 </script>

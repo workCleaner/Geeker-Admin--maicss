@@ -153,7 +153,6 @@ import { useTheme } from '@/hooks/useTheme'
 import { useGlobalStore } from '@/stores/modules/global'
 import type { LayoutType } from '@/stores/interface'
 import { DEFAULT_PRIMARY } from '@/config'
-import mittBus from '@/utils/mittBus'
 import SwitchDark from '@/components/SwitchDark/index.vue'
 
 const { changePrimary, changeGreyOrWeak, setAsideTheme, setHeaderTheme } = useTheme()
@@ -198,7 +197,7 @@ const setLayout = (val: LayoutType) => {
 
 // 打开主题设置
 const drawerVisible = ref(false)
-mittBus.on('openThemeDrawer', () => (drawerVisible.value = true))
+window.addEventListener('openThemeDrawer', () => (drawerVisible.value = true))
 </script>
 
 <style scoped lang="scss">

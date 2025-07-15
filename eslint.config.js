@@ -22,7 +22,7 @@ const GlobalType = {
   PageQuery: 'readonly',
   PageResult: 'readonly',
   OptionTreeType: 'readonly',
-  OptionType: 'readonly',
+  SelectOption: 'readonly',
   ResponseData: 'readonly',
   ExcelResult: 'readonly',
   TagView: 'readonly',
