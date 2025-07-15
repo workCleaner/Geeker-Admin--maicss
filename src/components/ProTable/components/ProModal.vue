@@ -15,7 +15,7 @@
                       <el-tooltip v-if="item?.tips" v-bind="getTooltipProps(item.tips)">
                         <QuestionFilled class="w-4 h-4 mx-1" />
                       </el-tooltip>
-                      <span v-if="modalConfig.colon" class="ml-0.5">:</span>
+                      <span v-if="modalConfig.colon">:</span>
                     </span>
                   </template>
 
@@ -79,7 +79,7 @@
                         <el-tooltip v-if="item?.tips" v-bind="getTooltipProps(item.tips)">
                           <QuestionFilled class="w-4 h-4 mx-1" />
                         </el-tooltip>
-                        <span v-if="modalConfig.colon" class="ml-0.5">:</span>
+                        <span v-if="modalConfig.colon">:</span>
                       </span>
                     </template>
 

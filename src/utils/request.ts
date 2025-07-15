@@ -4,14 +4,68 @@ import { showFullScreenLoading, tryHideFullScreenLoading } from '@/components/Lo
 import { LOGIN_URL } from '@/config'
 import { ElMessage } from 'element-plus'
 import { ResultEnum } from '@/enums/httpEnum'
-import { checkStatus } from './helper/checkStatus'
-import { AxiosCanceler } from './helper/axiosCancel'
 import { useUserStore } from '@/stores/modules/user'
 import router from '@/routers'
+import { useLoadingStore } from '@/stores/modules/loading'
+import { statusMessages } from '@/constants'
+import qs from 'qs'
 
-export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   loading?: boolean
   cancel?: boolean
+}
+
+// 声明一个 Map 用于存储每个请求的标识和取消函数
+const pendingMap = new Map<string, AbortController>()
+
+// 序列化参数，确保对象属性顺序一致
+const sortedStringify = (obj: any) => {
+  return qs.stringify(obj, { arrayFormat: 'repeat', sort: (a, b) => a.localeCompare(b) })
+}
+
+// 获取请求的唯一标识
+export const getPendingUrl = (config: CustomAxiosRequestConfig) => {
+  return [config.method, config.url, sortedStringify(config.data), sortedStringify(config.params)].join('&')
+}
+
+export class AxiosCanceler {
+  /**
+   * @description: 添加请求
+   * @param {Object} config
+   * @return void
+   */
+  addPending(config: CustomAxiosRequestConfig) {
+    // 在请求开始前，对之前的请求做检查取消操作
+    this.removePending(config)
+    const url = getPendingUrl(config)
+    const controller = new AbortController()
+    config.signal = controller.signal
+    pendingMap.set(url, controller)
+  }
+
+  /**
+   * @description: 移除请求
+   * @param {Object} config
+   */
+  removePending(config: CustomAxiosRequestConfig) {
+    const url = getPendingUrl(config)
+    // 如果在 pending 中存在当前请求标识，需要取消当前请求并删除条目
+    const controller = pendingMap.get(url)
+    if (controller) {
+      controller.abort()
+      pendingMap.delete(url)
+    }
+  }
+
+  /**
+   * @description: 清空所有pending
+   */
+  removeAllPending() {
+    pendingMap.forEach(controller => {
+      controller && controller.abort()
+    })
+    pendingMap.clear()
+  }
 }
 
 const config = {
@@ -39,6 +93,8 @@ class RequestHttp {
     this.service.interceptors.request.use(
       (config: CustomAxiosRequestConfig) => {
         const userStore = useUserStore()
+        const loadingStore = useLoadingStore()
+        loadingStore.setLoading(true)
         // 重复请求不需要取消，在 api 服务中通过指定的第三个参数: { cancel: false } 来控制
         config.cancel ??= true
         config.cancel && axiosCanceler.addPending(config)
@@ -61,9 +117,10 @@ class RequestHttp {
      */
     this.service.interceptors.response.use(
       (response: AxiosResponse & { config: CustomAxiosRequestConfig }) => {
+        const loadingStore = useLoadingStore()
+        loadingStore.setLoading(false)
         // todo responseType is blob or arraybuffer
         const { data, config } = response
-
         const userStore = useUserStore()
         axiosCanceler.removePending(config)
         config.loading && tryHideFullScreenLoading()
@@ -83,13 +140,18 @@ class RequestHttp {
         return data.data
       },
       async (error: AxiosError) => {
+        const loadingStore = useLoadingStore()
+        loadingStore.setLoading(false)
         const { response } = error
         tryHideFullScreenLoading()
         // 请求超时 && 网络错误单独判断，没有 response
         if (error.message.indexOf('timeout') !== -1) ElMessage.error('请求超时！请您稍后重试')
         if (error.message.indexOf('Network Error') !== -1) ElMessage.error('网络错误！请您稍后重试')
         // 根据服务器响应的错误状态码，做不同的处理
-        if (response) checkStatus(response.status)
+        if (response) {
+          const message = statusMessages[response.status] || '请求失败！'
+          ElMessage.error(message)
+        }
         // 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
         if (!window.navigator.onLine) router.replace('/500')
         return Promise.reject(error)

@@ -4,6 +4,7 @@
   <!-- 查询表单 -->
   <search-form
     v-show="isShowSearch"
+    ref="searchFormRef"
     :search="_search"
     :reset="_reset"
     :columns="searchColumns"
@@ -14,31 +15,34 @@
   <!-- 表格主体 -->
   <div class="card table-main">
     <!-- 表格头部 操作按钮 -->
-    <div class="table-header">
-      <div class="header-button-lf">
-        <slot
-          name="tableHeader"
-          :selected-list="selectedList"
-          :selected-list-ids="selectedListIds"
-          :is-selected="isSelected"
-        ></slot>
+    <div class="table-header flex justify-between mb-2">
+      <div class="header-button-left">
+        <template v-for="item in toolbarLeftArr" :key="item.auth">
+          <el-button
+            :icon="item.icon"
+            :type="item.type"
+            :auth="item.auth"
+            :loading="loading"
+            @click="handleToolbarClick(item.name)"
+          >
+            {{ item.text }}
+          </el-button>
+        </template>
       </div>
-      <div v-if="toolButton" class="header-button-ri">
-        <slot name="toolButton">
-          <el-button v-if="showToolButton('refresh')" :icon="Refresh" circle @click="getTableList" />
+      <div v-if="toolbarMiddle" class="header-button-middle">
+        <component :is="toolbarMiddle" />
+      </div>
+      <div class="header-button-right">
+        <template v-for="item in toolbarRightArr" :key="item.auth">
           <el-button
-            v-if="showToolButton('setting') && columns.length"
-            :icon="Operation"
+            :icon="item.icon"
+            :auth="item.auth"
+            :title="item.text"
+            :loading="loading"
             circle
-            @click="openColSetting"
+            @click="handleToolbarClick(item.name)"
           />
-          <el-button
-            v-if="showToolButton('search') && searchColumns?.length"
-            :icon="Search"
-            circle
-            @click="isShowSearch = !isShowSearch"
-          />
-        </slot>
+        </template>
       </div>
     </div>
     <!-- 表格主体 -->
@@ -79,8 +83,8 @@
         </el-table-column>
         <!-- other -->
         <table-column v-else :column="item">
-          <template v-for="slot in Object.keys($slots)" #[slot]="scope">
-            <slot :name="slot" v-bind="scope"></slot>
+          <template v-for="slotName in Object.keys($slots)" #[slotName]="scope">
+            <slot :name="slotName" v-bind="scope"></slot>
           </template>
         </table-column>
       </template>
@@ -109,23 +113,27 @@
     </slot>
   </div>
   <!-- 列设置 -->
-  <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting" />
+  <ColSetting
+    v-if="toolbarRightArr.some(item => item.name === 'layout')"
+    ref="colRef"
+    v-model:col-setting="colSetting"
+  />
 </template>
 
 <script setup lang="ts">
 defineOptions({ name: 'ProTable' })
-import { ref, watch, provide, onMounted, unref, computed, reactive } from 'vue'
+import { ref, watch, provide, onMounted, unref, computed, shallowReactive } from 'vue'
 import { ElTable } from 'element-plus'
 import { useTable } from '@/hooks/useTable'
 import { useSelection } from '@/hooks/useSelection'
-import type { ColumnProps, TypeProps, ProTableProps } from '@/components/ProTable/interface'
-import { Refresh, Operation, Search } from '@element-plus/icons-vue'
+import type { ColumnProps, TypeProps, ProTableProps } from './interface'
 import { handleProp } from '@/utils'
 import SearchForm from '@/components/SearchForm/index.vue'
 import Pagination from './components/Pagination.vue'
 import ColSetting from './components/ColSetting.vue'
 import TableColumn from './components/TableColumn'
 import Sortable from 'sortablejs'
+import { toolbarButtonsConfig } from '@/utils/proTable'
 
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
@@ -134,16 +142,11 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   pagination: true,
   initParam: () => ({}),
   border: true,
-  toolButton: true,
   rowKey: 'id',
   searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 })
 
-if (!props.pageAuthId) {
-  throw new Error('请配置 [pageAuthId]')
-}
-
-const pageId = computed(() => `id-${props.pageAuthId.replaceAll(':', '_')}`)
+const pageId = computed(() => `id-${crypto.randomUUID()}`)
 
 // table 实例
 const tableRef = ref<InstanceType<typeof ElTable>>()
@@ -154,16 +157,73 @@ const columnTypes: TypeProps[] = ['selection', 'radio', 'index', 'expand', 'sort
 // 是否显示搜索模块
 const isShowSearch = ref(true)
 
-// 控制 ToolButton 显示
-const showToolButton = (key: 'refresh' | 'setting' | 'search') => {
-  return Array.isArray(props.toolButton) ? props.toolButton.includes(key) : props.toolButton
-}
+const importModal = ref({
+  visible: false,
+  title: '导入',
+  type: 'import',
+})
+
+const exportModal = ref({
+  visible: false,
+  title: '导出',
+  type: 'export',
+})
+
+// 搜索表单实例
+const searchFormRef = ref<InstanceType<typeof SearchForm>>()
 
 // 单选值
 const radio = ref('')
 
+const toolbarLeftArr = computed(() => {
+  if (!props.toolbarLeft) return []
+  return props.toolbarLeft.map(item => {
+    if (typeof item === 'string') {
+      return toolbarButtonsConfig[item]
+    } else {
+      return item
+    }
+  })
+})
+
+const toolbarRightArr = computed(() => {
+  if (!props.toolbarRight) return [toolbarButtonsConfig.layout, toolbarButtonsConfig.search]
+  return props.toolbarRight.map(item => {
+    if (typeof item === 'string') {
+      return toolbarButtonsConfig[item]
+    } else {
+      return item
+    }
+  })
+})
+
 // 表格多选 Hooks
 const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey)
+
+// 处理 toolbar 点击事件
+const handleToolbarClick = (name: string) => {
+  const payload: { name: string; params?: any } = { name }
+  switch (name) {
+    case 'refresh':
+      search()
+      break
+    case 'upload':
+      importModal.value.visible = true
+      break
+    case 'export':
+      exportModal.value.visible = true
+      break
+    case 'layout':
+      openColSetting()
+      break
+    case 'search':
+      isShowSearch.value = !isShowSearch.value
+      break
+    default:
+      break
+  }
+  emit('toolbarClick', payload)
+}
 
 // 表格操作 Hooks
 const {
@@ -176,7 +236,7 @@ const {
   reset,
   handleSizeChange,
   handleCurrentChange,
-} = useTable(props.requestApi, props.initParam, props.pagination, props.dataCallback, props.requestError)
+} = useTable(props.requestApi, props.initParam, props.pagination, props.dataCallback)
 
 // 清空选中数据列表
 const clearSelection = () => tableRef.value!.clearSelection()
@@ -199,10 +259,14 @@ const processTableData = computed(() => {
 })
 
 // 监听页面 initParam 改化，重新获取表格数据
-watch(() => props.initParam, getTableList, { deep: true })
+watch(
+  () => props.initParam,
+  () => getTableList(false),
+  { deep: true }
+)
 
 // 接收 columns 并设置为响应式
-const tableColumns = reactive<ColumnProps[]>(props.columns)
+const tableColumns = shallowReactive(props.columns)
 
 // 扁平化 columns
 const flatColumns = computed(() => flatColumnsFunc(tableColumns))
@@ -264,6 +328,11 @@ searchColumns.value?.forEach((column, index) => {
   }
 })
 
+const setSearchParamForm = (key: string, value: any) => {
+  searchFormRef.value?.setSearchParamForm(key, value)
+  searchParam.value[key] = value
+}
+
 // 列设置 ==> 需要过滤掉不需要设置的列
 const colRef = ref()
 const colSetting = tableColumns!.filter(item => {
@@ -277,6 +346,7 @@ const emit = defineEmits<{
   search: []
   reset: []
   dragSort: [{ newIndex?: number; oldIndex?: number }]
+  toolbarClick: [{ name: string; params?: any }]
 }>()
 
 const _search = () => {
@@ -315,6 +385,7 @@ defineExpose({
   selectedList,
   selectedListIds,
 
+  setSearchParamForm,
   getTableList,
   search,
   reset,

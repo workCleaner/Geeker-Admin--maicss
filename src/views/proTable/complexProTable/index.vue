@@ -6,7 +6,7 @@
       title="用户列表"
       highlight-current-row
       :columns="columns"
-      :request-api="getUserList"
+      :request-api="UserAPI.getUserList"
       :row-class-name="tableRowClassName"
       :span-method="objectSpanMethod"
       :show-summary="true"
@@ -50,13 +50,14 @@
 <script setup lang="tsx" name="complexProTable">
 import { h, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { ResUserList } from '@/api/modules/user'
+import type { ResUserList } from '@/api/system/user'
 import { useHandleData } from '@/hooks/useHandleData'
 import ProTable from '@/components/ProTable/index.vue'
 import { CirclePlus, Pointer, Delete, Refresh } from '@element-plus/icons-vue'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type { ProTableInstance, ColumnProps, HeaderRenderScope } from '@/components/ProTable/interface'
-import { getUserList, deleteUser, resetUserPassWord, getUserStatus, getUserGender } from '@/api/modules/user'
+import { UserAPI } from '@/api/system/user'
+import type { DefaultRow } from 'element-plus/es/components/table/src/table/defaults.mjs'
 
 // ProTable 实例
 const proTable = ref<ProTableInstance>()
@@ -89,7 +90,7 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
         prop: 'gender',
         label: '性别',
         width: 100,
-        enum: getUserGender,
+        enum: UserAPI.getUserGender,
         fieldNames: { label: 'genderLabel', value: 'genderValue' },
       },
       {
@@ -107,7 +108,7 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
     prop: 'status',
     label: '用户状态',
     tag: true,
-    enum: getUserStatus,
+    enum: UserAPI.getUserStatus,
     fieldNames: { label: 'userLabel', value: 'userStatus' },
   },
   { prop: 'createTime', label: '创建时间', width: 200 },
@@ -121,7 +122,7 @@ const setCurrent = () => {
 }
 
 // 表尾合计行（自行根据条件计算）
-interface SummaryMethodProps<T = ResUserList> {
+interface SummaryMethodProps<T extends DefaultRow = ResUserList> {
   columns: TableColumnCtx<T>[]
   data: T[]
 }
@@ -164,20 +165,20 @@ const rowClick = (row: ResUserList, column: TableColumnCtx<ResUserList>) => {
 
 // 删除用户信息
 const deleteAccount = async (params: ResUserList) => {
-  await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`)
+  await useHandleData(UserAPI.deleteUser, { id: [params.id] }, `删除【${params.username}】用户`)
   proTable.value?.getTableList()
 }
 
 // 批量删除用户信息
 const batchDelete = async (id: string[]) => {
-  await useHandleData(deleteUser, { id }, '删除所选用户信息')
+  await useHandleData(UserAPI.deleteUser, { id }, '删除所选用户信息')
   proTable.value?.clearSelection()
   proTable.value?.getTableList()
 }
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
-  await useHandleData(resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`)
+  await useHandleData(UserAPI.resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`)
   proTable.value?.getTableList()
 }
 </script>

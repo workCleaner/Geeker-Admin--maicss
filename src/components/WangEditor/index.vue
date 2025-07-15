@@ -24,7 +24,7 @@ defineOptions({ name: 'WangEditor' })
 import { nextTick, computed, inject, shallowRef, onBeforeUnmount } from 'vue'
 import type { IToolbarConfig, IEditorConfig } from '@wangeditor/editor'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { uploadImg, uploadVideo } from '@/api/modules/upload'
+import { CommonAPI } from '@/api/common'
 import '@wangeditor/editor/dist/css/style.css'
 import { ElMessage, formContextKey, formItemContextKey } from 'element-plus'
 
@@ -104,7 +104,7 @@ props.editorConfig.MENU_CONF!['uploadImage'] = {
     let formData = new FormData()
     formData.append('file', file)
     try {
-      const { fileUrl } = await uploadImg(formData)
+      const { fileUrl } = await CommonAPI.uploadImg(formData)
       insertFn(fileUrl)
     } catch (error) {
       ElMessage.error((error as Error).toString())
@@ -130,7 +130,7 @@ props.editorConfig.MENU_CONF!['uploadVideo'] = {
     let formData = new FormData()
     formData.append('file', file)
     try {
-      const { fileUrl } = await uploadVideo(formData)
+      const { fileUrl } = await CommonAPI.uploadVideo(formData)
       insertFn(fileUrl)
     } catch (error) {
       ElMessage.error((error as Error).toString())

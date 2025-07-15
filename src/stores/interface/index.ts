@@ -1,4 +1,4 @@
-import type { MenuOptions } from '@/api/modules/menu'
+import type { MenuOptions } from '@/api/system/menu'
 
 export type LayoutType = 'vertical' | 'classic' | 'transverse' | 'columns'
 
@@ -52,7 +52,7 @@ export interface TabsState {
 /* AuthState */
 export interface AuthState {
   routeName: string
-  authButtonList: {
+  allAuthButtonList: {
     [key: string]: string[]
   }
   authMenuList: MenuOptions[]

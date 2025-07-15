@@ -1,6 +1,6 @@
 <template>
   <div v-if="columns.length" class="card table-search">
-    <el-form ref="formRef" :model="searchParam">
+    <el-form ref="formRef" :model="localSearchParam">
       <grid ref="gridRef" :collapsed="collapsed" :gap="[20, 0]" :cols="searchCol">
         <grid-item v-for="(item, index) in columns" :key="item.prop" v-bind="getResponsive(item)" :index="index">
           <el-form-item>
@@ -8,12 +8,12 @@
               <el-space :size="4">
                 <span>{{ `${item.search?.label ?? item.label}` }}</span>
                 <el-tooltip v-if="item.search?.tooltip" effect="dark" :content="item.search?.tooltip" placement="top">
-                  <i :class="'iconfont icon-yiwen'"></i>
+                  <material-symbols-help-outline class="cursor-pointer" />
                 </el-tooltip>
               </el-space>
               <span>&nbsp;:</span>
             </template>
-            <search-form-item :column="item" :search-param="searchParam" />
+            <search-form-item :column="item" :search-param="localSearchParam" />
           </el-form-item>
         </grid-item>
         <grid-item suffix>
@@ -34,20 +34,21 @@
 </template>
 <script setup lang="ts">
 defineOptions({ name: 'SearchForm' })
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { ColumnProps } from '@/components/ProTable/interface'
 import type { BreakPoint } from '@/components/Grid/interface'
 import { Delete, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
 import Grid from '@/components/Grid/index.vue'
 import GridItem from '@/components/Grid/components/GridItem.vue'
+import MaterialSymbolsHelpOutline from '~icons/material-symbols/help-outline?width=20px&height=20px'
 
 interface ProTableProps {
   columns?: ColumnProps[] // 搜索配置列
-  searchParam?: { [key: string]: any } // 搜索参数
+  searchParam?: IObject // 搜索参数
   searchCol: number | Record<BreakPoint, number>
-  search: (_params: any) => void // 搜索方法
-  reset: (_params: any) => void // 重置方法
+  search: (_params: IObject) => void // 搜索方法
+  reset: (_params: IObject) => void // 重置方法
 }
 
 // 默认值
@@ -69,6 +70,26 @@ const getResponsive = (item: ColumnProps) => {
   }
 }
 
+const localSearchParam = ref<IObject>({})
+
+watch(
+  props.searchParam,
+  newVal => {
+    localSearchParam.value = newVal
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+)
+
+const setSearchParamForm = (key: string, value: any) => {
+  if (localSearchParam.value[key]) {
+    localSearchParam.value[key] = value
+  } else {
+    throw new Error(`ProTable 搜索参数 ${key} 不存在，只能设置已初始化的参数`)
+  }
+}
 // 是否默认折叠搜索项
 const collapsed = ref(true)
 
@@ -92,4 +113,6 @@ const showCollapse = computed(() => {
   }, 0)
   return show
 })
+
+defineExpose({ setSearchParamForm })
 </script>

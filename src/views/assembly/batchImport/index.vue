@@ -20,7 +20,7 @@
 <script setup lang="ts">
 defineOptions({ name: 'BatchImport' })
 import { ref } from 'vue'
-import { exportUserInfo, BatchAddUser } from '@/api/modules/user'
+import { UserAPI } from '@/api/system/user'
 import { Upload } from '@element-plus/icons-vue'
 import ImportExcel from '@/components/ImportExcel/index.vue'
 
@@ -28,8 +28,8 @@ const importRef = ref()
 const batchAdd = () => {
   let params = {
     title: '数据',
-    tempApi: exportUserInfo,
-    importApi: BatchAddUser,
+    tempApi: UserAPI.exportUserInfo,
+    importApi: UserAPI.batchAddUser,
   }
   importRef.value.acceptParams(params)
 }

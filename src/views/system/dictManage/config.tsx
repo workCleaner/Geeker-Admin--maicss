@@ -1,13 +1,11 @@
 import type { ProTableProps } from '@/components/ProTable/interface'
-import type { Dict, DictQuery } from '@/api/modules/dict'
-import DictAPI from '@/api/modules/dict'
+import type { DictListItem, DictQuery } from '@/api/system/dict'
+import { DictAPI } from '@/api/system/dict'
 import { ElButton, ElMessage, ElTag } from 'element-plus'
-import { TABLE_COLUMN_OPERATION_NAME } from '@/constants'
+import { TABLE_COLUMN_OPERATIONS_NAME } from '@/constants/proTable'
 
-// eslint-disable-next-line no-unused-vars
-export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQuery, Dict> => {
+export function getConfig(): ProTableProps<DictQuery, DictListItem> {
   return {
-    pageAuthId: 'system:dict',
     columns: [
       {
         prop: 'name',
@@ -35,7 +33,7 @@ export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQu
         },
       },
       {
-        prop: TABLE_COLUMN_OPERATION_NAME,
+        prop: TABLE_COLUMN_OPERATIONS_NAME,
         width: 200,
         fixed: 'right',
         render: scope => {
@@ -52,8 +50,9 @@ export const getConfig = ({ openDrawer, deleteDict }: any): ProTableProps<DictQu
     },
     requestApi: DictAPI.getDictList,
     pagination: true,
-    toolButton: ['refresh', 'setting', 'search'],
-    rowKey: 'id',
+    toolbarLeft: ['add', 'delete'],
+    toolbarRight: ['refresh', 'layout', 'search'],
+    toolbarMiddle: <span>本页面是随机 mock 数据，跟常用组件里的 dict 数据没有关系</span>,
     searchCol: { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 },
     title: '字典管理',
   }

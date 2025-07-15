@@ -47,7 +47,7 @@
 defineOptions({ name: 'UploadImgs' })
 import { ref, computed, inject, watch } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { uploadImg } from '@/api/modules/upload'
+import { CommonAPI } from '@/api/common'
 import type { UploadProps, UploadFile, UploadUserFile, UploadRequestOptions } from 'element-plus'
 import { ElNotification, formContextKey, formItemContextKey } from 'element-plus'
 
@@ -127,7 +127,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
   let formData = new FormData()
   formData.append('file', options.file)
   try {
-    const api = props.api ?? uploadImg
+    const api = props.api ?? CommonAPI.uploadImg
     const data = await api(formData)
     options.onSuccess(data)
   } catch (error) {

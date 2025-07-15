@@ -1,29 +1,13 @@
 <template>
   <div class="table-box">
-    <ProTable ref="proTable" v-bind="config" @drag-sort="sortTable">
-      <!-- 表格 header 按钮 -->
-      <template #tableHeader="scope">
-        <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')">新增字典</el-button>
-        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd">批量添加字典</el-button>
-        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">
-          导出字典数据
-        </el-button>
-        <el-button
-          type="danger"
-          :icon="Delete"
-          plain
-          :disabled="!scope.isSelected"
-          @click="batchDelete(scope.selectedListIds)"
-        >
-          批量删除
-        </el-button>
-      </template>
-      <!-- 表格操作 -->
-      <template #operation="scope">
-        <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
-        <el-button type="primary" link :icon="Delete" @click="deleteDict(scope.row)">删除</el-button>
-      </template>
-    </ProTable>
+    <ProTable
+      ref="proTable"
+      :key="proTableKey"
+      v-bind="config"
+      :request-api="config.requestApi"
+      @drag-sort="sortTable"
+      @toolbar-click="handleToolbarClick"
+    />
     <UserDrawer ref="drawerRef" />
     <ImportExcel ref="importRef" />
   </div>
@@ -36,19 +20,29 @@ import { getConfig } from './config'
 import ProTable from '@/components/ProTable/index.vue'
 import ImportExcel from '@/components/ImportExcel/index.vue'
 import UserDrawer from '@/views/proTable/components/UserDrawer.vue'
-import { CirclePlus, Delete, Download, Upload, EditPen } from '@element-plus/icons-vue'
-import type { Dict } from '@/api/modules/dict'
+import type { DictListItem } from '@/api/system/dict'
 import { ref } from 'vue'
-import DictAPI from '@/api/modules/dict'
+import { DictAPI } from '@/api/system/dict'
 
 const drawerRef = ref()
 const importRef = ref()
 const proTable = ref()
 
+const tableData = ref<DictListItem[]>([])
+
+const getTableData = async () => {
+  const res = await DictAPI.getDictList({ pageNum: 1, pageSize: 20 })
+  tableData.value = res.list
+}
+
+getTableData()
+
 const sortTable = () => {}
-// eslint-disable-next-line no-unused-vars
-const batchDelete = (ids: string[]) => {}
-const openDrawer = (title: string, row: Partial<Dict> = {}) => {
+const batchDelete = (ids: string[]) => {
+  // eslint-disable-next-line no-console
+  console.log(ids)
+}
+const openDrawer = (title: string, row: Partial<DictListItem> = {}) => {
   const params = {
     title,
     row: { ...row },
@@ -58,13 +52,16 @@ const openDrawer = (title: string, row: Partial<Dict> = {}) => {
   }
   drawerRef.value?.acceptParams(params)
 }
-const downloadFile = () => {}
-const batchAdd = () => {}
-// eslint-disable-next-line no-unused-vars
-const deleteDict = (item: Dict) => {}
 
-const config = getConfig({
-  openDrawer,
-  deleteDict,
-})
+const config = getConfig()
+
+const proTableKey = config.columns.map(col => col.label ?? '').join('-')
+
+const handleToolbarClick = ({ name }: { name: string }) => {
+  if (name === 'add') {
+    openDrawer('新增')
+  } else if (name === 'delete') {
+    batchDelete(proTable.value?.selectedListIds)
+  }
+}
 </script>

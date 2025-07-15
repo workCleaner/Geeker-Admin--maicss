@@ -1,8 +1,8 @@
 import { inject, ref, useSlots, defineComponent } from 'vue'
-import type { ColumnProps, RenderScope, HeaderRenderScope } from '@/components/ProTable/interface'
+import type { ColumnProps, RenderScope, HeaderRenderScope } from '../interface'
 import { filterEnum, formatValue, handleProp, handleRowAccordingToProp } from '@/utils'
 import { ElTableColumn, ElTag } from 'element-plus'
-import { TABLE_COLUMN_OPERATION_NAME } from '@/constants'
+import { TABLE_COLUMN_OPERATIONS_NAME } from '@/constants/proTable'
 
 export default defineComponent({
   name: 'TableColumn',
@@ -42,7 +42,7 @@ export default defineComponent({
             <ElTableColumn
               {...item}
               align={item.align ?? 'center'}
-              showOverflowTooltip={item.showOverflowTooltip ?? item.prop !== TABLE_COLUMN_OPERATION_NAME}
+              showOverflowTooltip={item.showOverflowTooltip ?? item.prop !== TABLE_COLUMN_OPERATIONS_NAME}
               label={item.label}
               fixed={item.fixed}
             >

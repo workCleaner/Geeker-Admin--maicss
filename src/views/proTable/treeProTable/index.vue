@@ -14,7 +14,7 @@
         row-key="id"
         :indent="20"
         :columns="columns"
-        :request-api="getUserTreeList"
+        :request-api="UserAPI.getUserTreeList"
         :request-auto="false"
         :init-param="initParam"
         :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }"
@@ -38,7 +38,7 @@
 
 <script setup lang="tsx" name="treeProTable">
 import { onMounted, reactive, ref } from 'vue'
-import type { ResUserList } from '@/api/modules/user'
+import type { ResUserList } from '@/api/system/user'
 import { genderType } from '@/utils/dict'
 import { useHandleData } from '@/hooks/useHandleData'
 import { ElMessage, ElNotification } from 'element-plus'
@@ -48,7 +48,7 @@ import ImportExcel from '@/components/ImportExcel/index.vue'
 import UserDrawer from '@/views/proTable/components/UserDrawer.vue'
 import { CirclePlus, Delete, EditPen, View } from '@element-plus/icons-vue'
 import type { ColumnProps, ProTableInstance } from '@/components/ProTable/interface'
-import { getUserTreeList, deleteUser, editUser, addUser, getUserStatus, getUserDepartment } from '@/api/modules/user'
+import { UserAPI } from '@/api/system/user'
 
 onMounted(() => {
   getTreeFilter()
@@ -78,7 +78,7 @@ const initParam = reactive({ departmentId: '' })
 // 当 proTable 的 requestAuto 属性为 false，不会自动请求表格数据，等待 treeFilter 数据回来之后，更改 initParam.departmentId 的值，才会触发请求 proTable 数据
 const treeFilterData = ref<any>([])
 const getTreeFilter = async () => {
-  treeFilterData.value = await getUserDepartment()
+  treeFilterData.value = await UserAPI.getUserDepartment()
   initParam.departmentId = treeFilterData.value[1].id
 }
 
@@ -133,7 +133,7 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
     label: '用户状态',
     sortable: true,
     tag: true,
-    enum: getUserStatus,
+    enum: UserAPI.getUserStatus,
     search: { el: 'tree-select' },
     fieldNames: { label: 'userLabel', value: 'userStatus' },
   },
@@ -143,7 +143,7 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
 
 // 删除用户信息
 const deleteAccount = async (params: ResUserList) => {
-  await useHandleData(deleteUser, { id: [params.id] }, `删除【${params.username}】用户`)
+  await useHandleData(UserAPI.deleteUser, { id: [params.id] }, `删除【${params.username}】用户`)
   proTable.value?.getTableList()
 }
 
@@ -154,7 +154,7 @@ const openDrawer = (title: string, row: Partial<ResUserList> = {}) => {
     title,
     row: { ...row },
     isView: title === '查看',
-    api: title === '新增' ? addUser : title === '编辑' ? editUser : undefined,
+    api: title === '新增' ? UserAPI.addUser : title === '编辑' ? UserAPI.editUser : undefined,
     getTableList: proTable.value?.getTableList,
   }
   drawerRef.value?.acceptParams(params)

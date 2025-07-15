@@ -58,7 +58,7 @@ import { ref, reactive } from 'vue'
 import { genderType } from '@/utils/dict'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import type { ResUserList } from '@/api/modules/user'
+import type { ResUserList } from '@/api/system/user'
 import UploadImg from '@/components/Upload/Img.vue'
 import UploadImgs from '@/components/Upload/Imgs.vue'
 

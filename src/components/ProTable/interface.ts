@@ -1,8 +1,10 @@
-import type { VNode, ComponentPublicInstance, Ref } from 'vue'
+import type { VNode, ComponentPublicInstance, Ref, VNodeChild } from 'vue'
 import type { BreakPoint, Responsive } from '@/components/Grid/interface'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
 import type ProTable from '@/components/ProTable/index.vue'
-import type { ColProps, DialogProps, DrawerProps, FormItemRule, FormProps } from 'element-plus'
+import type { ColProps, DialogProps, DrawerProps, ButtonProps, FormItemRule, FormProps } from 'element-plus'
+import type { MaybeRef } from 'vue'
+import type { DefaultRow } from 'element-plus/es/components/table/src/table/defaults.mjs'
 
 export interface EnumProps {
   label?: string // 选项框显示的文字
@@ -55,25 +57,25 @@ export type FieldNamesProps = {
   children?: string
 }
 
-export type RenderScope<T> = {
+export type RenderScope<T extends DefaultRow> = {
   row: T
   $index: number
   column: TableColumnCtx<T>
   [key: string]: any
 }
 
-export type HeaderRenderScope<T> = {
+export type HeaderRenderScope<T extends DefaultRow> = {
   $index: number
   column: TableColumnCtx<T>
   [key: string]: any
 }
 
-export interface ColumnProps<T = any>
-  extends Partial<Omit<TableColumnCtx<T>, 'type' | 'children' | 'renderCell' | 'renderHeader'>> {
+export interface ColumnProps<T extends DefaultRow = any>
+  extends Partial<Omit<TableColumnCtx<T>, 'type' | 'children' | 'renderCell' | 'renderHeader' | 'label'>> {
   type?: TypeProps // 列类型
-  tag?: boolean | Ref<boolean> // 是否是标签展示
-  isShow?: boolean | Ref<boolean> // 是否显示在表格当中
-  isSetting?: boolean | Ref<boolean> // 是否在 ColSetting 中可配置
+  tag?: MaybeRef<boolean> // 是否是标签展示
+  isShow?: MaybeRef<boolean> // 是否显示在表格当中
+  isSetting?: MaybeRef<boolean> // 是否在 ColSetting 中可配置
   search?: SearchProps | undefined // 搜索项配置
   enum?: EnumProps[] | Ref<EnumProps[]> | ((_params?: any) => Promise<any>) // 枚举字典
   isFilterEnum?: boolean | Ref<boolean> // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
@@ -81,23 +83,50 @@ export interface ColumnProps<T = any>
   headerRender?: (_scope: HeaderRenderScope<T>) => VNode // 自定义表头内容渲染（tsx语法）
   render?: (_scope: RenderScope<T>) => VNode | string // 自定义单元格内容渲染（tsx语法）
   _children?: ColumnProps<T>[] // 多级表头
+  label?: string
 }
 
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>
 
-export interface ProTableProps<Q = any, I = any> {
-  pageAuthId: string
+export interface ProTableProps<Q = any, I extends DefaultRow = any, Extra = IObject> {
+  loading?: boolean // 表格是否加载中 ==> 非必传（默认为false）
+  // 表格工具栏(默认支持add,delete,export,也可自定义)
+  toolbarLeft?: Array<
+    | 'add'
+    | 'delete'
+    | 'import'
+    | {
+        auth: string
+        icon?: string
+        name: string
+        text: string
+        type: ButtonProps['type']
+      }
+  >
+  // 表格工具栏右侧图标
+  toolbarRight?: Array<
+    | 'refresh'
+    | 'layout'
+    | 'export'
+    | 'download'
+    | 'search'
+    | {
+        name: string
+        icon: string
+        text?: string
+        auth?: string
+      }
+  >
+  toolbarMiddle?: VNodeChild // 表格工具栏中间内容
   columns: ColumnProps<I>[] // 列配置项  ==> 必传
   data?: I[] // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
-  requestApi?: (_params: Q) => Promise<ResultPage<I>> // 请求表格数据的 api ==> 非必传
+  requestApi: (_params: Q & Extra) => Promise<ResultPage<I>> // 请求表格数据的 api ==> 非必传
   requestAuto?: boolean // 是否自动执行请求 api ==> 非必传（默认为true）
-  requestError?: (_params: any) => void // 表格 api 请求错误监听 ==> 非必传
-  dataCallback?: (_data: any) => any // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
+  dataCallback?: (_data: I[]) => IObject[] // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
   title?: string // 表格标题 ==> 非必传
   pagination?: boolean // 是否需要分页组件 ==> 非必传（默认为true）
   initParam?: Partial<Q> // 初始化请求参数 ==> 非必传（默认为{}）
   border?: boolean // 是否带有纵向边框 ==> 非必传（默认为true）
-  toolButton?: ('refresh' | 'setting' | 'search')[] | boolean // 是否显示表格功能按钮 ==> 非必传（默认为true）
   rowKey?: string // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   searchCol?: number | Record<BreakPoint, number> // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
 }

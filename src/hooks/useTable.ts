@@ -1,5 +1,5 @@
-import { reactive, computed, toRefs } from 'vue'
-
+import { reactive, toRefs } from 'vue'
+import { DEFAULT_PAGE_SIZE } from '@/constants/proTable'
 export interface Pageable {
   pageNum: number
   pageSize: number
@@ -21,12 +21,15 @@ export interface StateProps {
  * @param {Boolean} isPageable 是否有分页 (非必传，默认为true)
  * @param {Function} dataCallBack 对后台返回的数据进行处理的方法 (非必传)
  * */
-export const useTable = (
-  api?: (_params: any) => Promise<any>,
-  initParam: object = {},
+export const useTable = <
+  RequestT,
+  ResponseT extends { list: TableItem[]; total: number } | TableItem[],
+  TableItem = any,
+>(
+  api: (_params: RequestT) => Promise<ResponseT>,
+  _initParam: object = {},
   isPageable: boolean = true,
-  dataCallBack?: (_data: any) => any,
-  requestError?: (_error: any) => void
+  dataCallBack?: (_data: TableItem[]) => IObject[]
 ) => {
   const state = reactive<StateProps>({
     // 表格数据
@@ -36,7 +39,7 @@ export const useTable = (
       // 当前页数
       pageNum: 1,
       // 每页显示条数
-      pageSize: 10,
+      pageSize: DEFAULT_PAGE_SIZE,
       // 总条数
       total: 0,
     },
@@ -49,42 +52,24 @@ export const useTable = (
   })
 
   /**
-   * @description 分页查询参数(只包括分页和表格字段排序,其他排序方式可自行配置)
-   * */
-  const pageParam = computed({
-    get: () => {
-      return {
-        pageNum: state.pageable.pageNum,
-        pageSize: state.pageable.pageSize,
-      }
-    },
-    set: (newVal: any) => {
-      console.error('我是分页更新之后的值', newVal)
-    },
-  })
-
-  /**
    * @description 获取表格数据
    * @return void
    * */
-  const getTableList = async () => {
-    if (!api) return
+  const getTableList = async (resetPageSize: boolean = false) => {
     try {
       // 先把初始化参数和分页参数放到总参数里面
-      Object.assign(state.totalParam, initParam, isPageable ? pageParam.value : {})
-      let data = await api({ ...state.searchInitParam, ...state.totalParam })
-      dataCallBack && (data = dataCallBack(data))
-      state.tableData = isPageable ? data.list : data
+      state.totalParam = { ...state.totalParam, ..._initParam, pageNum: 1 }
+      if (resetPageSize) {
+        state.pageable.pageSize = DEFAULT_PAGE_SIZE
+      }
+      // todo 这里不用 as RequestT，更优雅一些
+      const data = await api({ ...state.searchInitParam, ...state.totalParam } as RequestT)
+      const listData: TableItem[] = isPageable ? (data as { list: TableItem[] }).list : (data as TableItem[])
+      state.pageable.total = isPageable ? (data as { total: number }).total : 0
+      state.tableData = dataCallBack ? dataCallBack(listData) : (listData as TableItem[])
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
-      if (isPageable) {
-        state.pageable.total = data.total
-      }
     } catch (error) {
-      if (requestError) {
-        requestError(error)
-      } else {
-        throw new Error(error as any)
-      }
+      throw new Error(error as any)
     }
   }
 
@@ -125,7 +110,7 @@ export const useTable = (
     // 重置搜索表单的时，如果有默认搜索参数，则重置默认的搜索参数
     state.searchParam = { ...state.searchInitParam }
     updatedTotalParam()
-    getTableList()
+    getTableList(true)
   }
 
   /**

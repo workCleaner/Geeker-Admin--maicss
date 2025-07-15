@@ -1,41 +1,47 @@
 import { defineStore } from 'pinia'
 import type { AuthState } from '@/stores/interface'
-import { getAuthButtonListApi, getAuthMenuListApi } from '@/api/modules/login'
+import { AccountAPI } from '@/api/account'
 import { getFlatMenuList, getShowMenuList, getAllBreadcrumbList } from '@/utils'
+import { useRoute } from 'vue-router'
+import { computed, reactive, toRefs } from 'vue'
 
-export const useAuthStore = defineStore('geeker-auth', {
-  state: (): AuthState => ({
-    // 按钮权限列表
-    authButtonList: {},
+export const useAuthStore = defineStore('geeker-auth', () => {
+  const route = useRoute()
+  const state = reactive<AuthState>({
+    // 全部的按钮权限列表
+    allAuthButtonList: {},
     // 菜单权限列表
     authMenuList: [],
     // 当前页面的 router name，用来做按钮权限筛选
     routeName: '',
-  }),
-  getters: {
-    // 按钮权限列表
-    authButtonListGet: state => state.authButtonList,
-    // 菜单权限列表 ==> 这里的菜单没有经过任何处理
-    authMenuListGet: state => state.authMenuList,
-    // 菜单权限列表 ==> 左侧菜单栏渲染，需要剔除 isHide == true
-    showMenuListGet: state => getShowMenuList(state.authMenuList),
-    // 菜单权限列表 ==> 扁平化之后的一维数组菜单，主要用来添加动态路由
-    flatMenuListGet: state => getFlatMenuList(state.authMenuList),
-    // 递归处理后的所有面包屑导航列表
-    breadcrumbListGet: state => getAllBreadcrumbList(state.authMenuList),
-  },
-  actions: {
-    // Get AuthButtonList
+  })
+
+  const authButtonList = computed(() => {
+    return state.allAuthButtonList[route.name as string] || []
+  })
+
+  const showMenuListGet = computed(() => getShowMenuList(state.authMenuList))
+  const flatMenuListGet = computed(() => getFlatMenuList(state.authMenuList))
+  const breadcrumbListGet = computed(() => getAllBreadcrumbList(state.authMenuList))
+
+  const actions = {
     async getAuthButtonList() {
-      this.authButtonList = await getAuthButtonListApi()
+      state.allAuthButtonList = await AccountAPI.getUserButtons()
     },
-    // Get AuthMenuList
     async getAuthMenuList() {
-      this.authMenuList = await getAuthMenuListApi()
+      state.authMenuList = await AccountAPI.getUserMenu()
     },
-    // Set RouteName
     async setRouteName(name: string) {
-      this.routeName = name
+      state.routeName = name
     },
-  },
+  }
+
+  return {
+    ...toRefs(state),
+    authButtonList,
+    showMenuListGet,
+    flatMenuListGet,
+    breadcrumbListGet,
+    ...actions,
+  }
 })

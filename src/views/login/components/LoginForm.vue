@@ -37,16 +37,17 @@
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { HOME_URL } from '@/config'
-import { getTimeState } from '@/utils'
+import { encryptPassword, getTimeState } from '@/utils'
 import { ElNotification } from 'element-plus'
-import { loginApi, type ReqLoginForm } from '@/api/modules/login'
+import { AuthApi, type ReqLoginForm } from '@/api/auth'
 import { useUserStore } from '@/stores/modules/user'
 import { useTabsStore } from '@/stores/modules/tabs'
 import { useKeepAliveStore } from '@/stores/modules/keepAlive'
 import { initDynamicRouter } from '@/routers/modules/dynamicRouter'
 import { CircleClose, UserFilled } from '@element-plus/icons-vue'
 import type { ElForm } from 'element-plus'
-import md5 from 'md5'
+import { useLoadingStore } from '@/stores/modules/loading'
+import { storeToRefs } from 'pinia'
 
 // todo caps lock
 // todo forget password
@@ -63,10 +64,10 @@ const loginRules = reactive({
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 })
 
-const loading = ref(false)
+const { loading } = storeToRefs(useLoadingStore())
 const loginForm = reactive<ReqLoginForm>({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: '123456',
 })
 
 // login
@@ -74,30 +75,27 @@ const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (!valid) return
-    loading.value = true
-    try {
-      // 1.执行登录接口
-      const { access_token } = await loginApi({ ...loginForm, password: md5(loginForm.password) })
-      userStore.setToken(access_token)
+    // 1.执行登录接口
+    const hashedPassword = await encryptPassword(loginForm.password)
+    const { access_token } = await AuthApi.login({ ...loginForm, password: hashedPassword })
+    localStorage.setItem('userCode', loginForm.username)
+    userStore.setToken(access_token)
 
-      // 2.添加动态路由
-      await initDynamicRouter()
+    // 2.添加动态路由
+    await initDynamicRouter()
 
-      // 3.清空 tabs、keepAlive 数据
-      tabsStore.setTabs([])
-      keepAliveStore.setKeepAliveName([])
+    // 3.清空 tabs、keepAlive 数据
+    tabsStore.setTabs([])
+    keepAliveStore.setKeepAliveName([])
 
-      // 4.跳转到首页
-      router.push(HOME_URL)
-      ElNotification({
-        title: getTimeState(),
-        message: '欢迎登录 Geeker-Admin',
-        type: 'success',
-        duration: 3000,
-      })
-    } finally {
-      loading.value = false
-    }
+    // 4.跳转到首页
+    router.push(HOME_URL)
+    ElNotification({
+      title: getTimeState(),
+      message: '欢迎登录 Geeker-Admin',
+      type: 'success',
+      duration: 3000,
+    })
   })
 }
 
