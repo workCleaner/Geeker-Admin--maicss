@@ -31,8 +31,12 @@ onMounted(() => {
 
 // element language
 const locale = computed(() => {
-  if (globalStore.language == 'zh') return zhCn
-  if (globalStore.language == 'en') return en
+  if (globalStore.language == 'zh') {
+    return zhCn
+  }
+  if (globalStore.language == 'en') {
+    return en
+  }
   return getBrowserLang() == 'zh' ? zhCn : en
 })
 

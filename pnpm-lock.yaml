@@ -78,9 +78,6 @@ importers:
       '@iconify/json':
         specifier: ^2.2.358
         version: 2.2.358
-      '@iconify/utils':
-        specifier: ^2.3.0
-        version: 2.3.0
       '@types/node':
         specifier: ^24.0.13
         version: 24.0.13

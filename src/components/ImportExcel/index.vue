@@ -83,7 +83,9 @@ const acceptParams = (params: ExcelParameterProps) => {
 
 // Excel 导入模板下载
 const downloadTemp = () => {
-  if (!parameter.value.tempApi) return
+  if (!parameter.value.tempApi) {
+    return
+  }
   useDownload(parameter.value.tempApi, `${parameter.value.title}模板`)
 }
 
@@ -104,13 +106,14 @@ const uploadExcel = async (param: UploadRequestOptions) => {
 const beforeExcelUpload = (file: UploadRawFile) => {
   const isExcel = parameter.value.fileType!.includes(file.type as ExcelMimeType)
   const fileSize = file.size / 1024 / 1024 < parameter.value.fileSize!
-  if (!isExcel)
+  if (!isExcel) {
     ElNotification({
       title: '温馨提示',
       message: '上传文件只能是 xls / xlsx 格式！',
       type: 'warning',
     })
-  if (!fileSize)
+  }
+  if (!fileSize) {
     setTimeout(() => {
       ElNotification({
         title: '温馨提示',
@@ -118,6 +121,7 @@ const beforeExcelUpload = (file: UploadRawFile) => {
         type: 'warning',
       })
     }, 0)
+  }
   return isExcel && fileSize
 }
 

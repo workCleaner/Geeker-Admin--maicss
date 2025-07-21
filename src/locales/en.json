@@ -11,7 +11,19 @@
     "delete": "Delete",
     "import": "Import",
     "submit": "Submit",
-    "operations": "Operations"
+    "operations": "Operations",
+    "gender": "Gender",
+    "userStatus": "User Status",
+    "radio": "Radio",
+    "index": "#",
+    "operation": "Operation",
+    "username": "Username",
+    "idCard": "ID Card",
+    "email": "Email",
+    "address": "Address",
+    "createTime": "Create Time",
+    "status": "Status",
+    "title": "Title"
   },
   "home": {
     "welcome": "Welcome"

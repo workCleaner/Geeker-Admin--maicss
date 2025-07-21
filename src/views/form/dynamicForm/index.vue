@@ -86,7 +86,9 @@ const addDomain = () => {
 }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   await formEl.validate((valid, fields) => {
     if (valid) {
       console.error('submit!')
@@ -97,7 +99,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   formEl.resetFields()
 }
 </script>

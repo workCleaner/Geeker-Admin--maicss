@@ -35,7 +35,9 @@ const assemblySizeList = [
 ]
 
 const setAssemblySize = (item: AssemblySizeType) => {
-  if (assemblySize.value === item) return
+  if (assemblySize.value === item) {
+    return
+  }
   globalStore.assemblySize = item
 }
 </script>

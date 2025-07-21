@@ -1,4 +1,3 @@
-import { inject, ref, useSlots, defineComponent } from 'vue'
 import type { ColumnProps, RenderScope, HeaderRenderScope } from '../interface'
 import { filterEnum, formatValue, handleProp, handleRowAccordingToProp } from '@/utils'
 import { ElTableColumn, ElTag } from 'element-plus'
@@ -41,23 +40,34 @@ export default defineComponent({
           {item.isShow && (
             <ElTableColumn
               {...item}
-              align={item.align ?? 'center'}
+              align={item.align}
               showOverflowTooltip={item.showOverflowTooltip ?? item.prop !== TABLE_COLUMN_OPERATIONS_NAME}
-              label={item.label}
+              label={unref(item.label)}
               fixed={item.fixed}
             >
               {{
                 default: (scope: RenderScope<any>) => {
-                  if (item._children) return item._children.map(child => RenderTableColumn(child))
-                  if (item.render) return item.render(scope)
-                  if (item.prop && slots[handleProp(item.prop)]) return slots[handleProp(item.prop)]!(scope)
-                  if (item.tag) return <ElTag type={getTagType(item, scope)}>{renderCellData(item, scope)}</ElTag>
+                  if (item.children) {
+                    return item.children.map(child => RenderTableColumn(child))
+                  }
+                  if (item.render) {
+                    return item.render(scope)
+                  }
+                  if (item.prop && slots[handleProp(item.prop)]) {
+                    return slots[handleProp(item.prop)]!(scope)
+                  }
+                  if (item.tag) {
+                    return <ElTag type={getTagType(item, scope)}>{renderCellData(item, scope)}</ElTag>
+                  }
                   return renderCellData(item, scope)
                 },
                 header: (scope: HeaderRenderScope<any>) => {
-                  if (item.headerRender) return item.headerRender(scope)
-                  if (item.prop && slots[`${handleProp(item.prop)}Header`])
+                  if (item.headerRender) {
+                    return item.headerRender(scope)
+                  }
+                  if (item.prop && slots[`${handleProp(item.prop)}Header`]) {
                     return slots[`${handleProp(item.prop)}Header`]!(scope)
+                  }
                   return item.label
                 },
               }}

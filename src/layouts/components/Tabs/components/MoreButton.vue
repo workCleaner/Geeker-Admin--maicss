@@ -66,7 +66,9 @@ const maximize = () => {
 
 // Close Current
 const closeCurrentTab = () => {
-  if (route.meta.isAffix) return
+  if (route.meta.isAffix) {
+    return
+  }
   tabStore.removeTabs(route.fullPath)
 }
 

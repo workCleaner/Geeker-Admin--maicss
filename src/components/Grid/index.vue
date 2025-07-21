@@ -69,7 +69,9 @@ provide('shouldHiddenIndex', hiddenIndex)
 
 // 注入 cols
 const gridCols = computed(() => {
-  if (typeof props.cols === 'object') return props.cols[breakPoint.value] ?? props.cols
+  if (typeof props.cols === 'object') {
+    return props.cols[breakPoint.value] ?? props.cols
+  }
   return props.cols
 })
 provide('cols', gridCols)
@@ -82,10 +84,13 @@ const findIndex = () => {
   let suffix: VNode | null = null
   slots.forEach((slot: any) => {
     // suffix
-    if (typeof slot.type === 'object' && slot.type.name === 'GridItem' && slot.props?.suffix !== undefined)
+    if (typeof slot.type === 'object' && slot.type.name === 'GridItem' && slot.props?.suffix !== undefined) {
       suffix = slot
+    }
     // slot children
-    if (typeof slot.type === 'symbol' && Array.isArray(slot.children)) fields.push(...slot.children)
+    if (typeof slot.type === 'symbol' && Array.isArray(slot.children)) {
+      fields.push(...slot.children)
+    }
   })
 
   // 计算 suffix 所占用的列
@@ -108,7 +113,9 @@ const findIndex = () => {
       }
       return prev
     }, 0)
-    if (!find) hiddenIndex.value = -1
+    if (!find) {
+      hiddenIndex.value = -1
+    }
   } catch (e) {
     // console.warn(e);
   }
@@ -118,7 +125,9 @@ const findIndex = () => {
 watch(
   () => breakPoint.value,
   () => {
-    if (props.collapsed) findIndex()
+    if (props.collapsed) {
+      findIndex()
+    }
   }
 )
 
@@ -126,15 +135,21 @@ watch(
 watch(
   () => props.collapsed,
   value => {
-    if (value) return findIndex()
+    if (value) {
+      return findIndex()
+    }
     hiddenIndex.value = -1
   }
 )
 
 // 设置间距
 const gridGap = computed(() => {
-  if (typeof props.gap === 'number') return `${props.gap}px`
-  if (Array.isArray(props.gap)) return `${props.gap[1]}px ${props.gap[0]}px`
+  if (typeof props.gap === 'number') {
+    return `${props.gap}px`
+  }
+  if (Array.isArray(props.gap)) {
+    return `${props.gap[1]}px ${props.gap[0]}px`
+  }
   return 'unset'
 })
 

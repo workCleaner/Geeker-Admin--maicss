@@ -74,7 +74,9 @@ const self_disabled = computed(() => {
 })
 
 // 判断当前富文本编辑器是否禁用
-if (self_disabled.value) nextTick(() => editorRef.value.disable())
+if (self_disabled.value) {
+  nextTick(() => editorRef.value.disable())
+}
 
 // 富文本的内容监听，触发父组件改变，实现双向数据绑定
 const emit = defineEmits<{
@@ -87,7 +89,9 @@ const valueHtml = computed({
   },
   set(val: string) {
     // 防止富文本内容为空时，校验失败
-    if (editorRef.value.isEmpty()) val = ''
+    if (editorRef.value.isEmpty()) {
+      val = ''
+    }
     emit('update:value', val)
   },
 })
@@ -151,7 +155,9 @@ const handleBlur = () => {
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
-  if (!editorRef.value) return
+  if (!editorRef.value) {
+    return
+  }
   editorRef.value.destroy()
 })
 

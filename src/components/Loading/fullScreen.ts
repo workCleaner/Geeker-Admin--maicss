@@ -37,7 +37,9 @@ export const showFullScreenLoading = () => {
  * @description 隐藏全屏加载
  * */
 export const tryHideFullScreenLoading = () => {
-  if (needLoadingRequestCount <= 0) return
+  if (needLoadingRequestCount <= 0) {
+    return
+  }
   needLoadingRequestCount--
   if (needLoadingRequestCount === 0) {
     endLoading()

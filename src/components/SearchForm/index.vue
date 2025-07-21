@@ -105,9 +105,13 @@ const showCollapse = computed(() => {
       (current.search![breakPoint.value]?.span ?? current.search?.span ?? 1) +
       (current.search![breakPoint.value]?.offset ?? current.search?.offset ?? 0)
     if (typeof props.searchCol !== 'number') {
-      if (prev >= props.searchCol[breakPoint.value]) show = true
+      if (prev >= props.searchCol[breakPoint.value]) {
+        show = true
+      }
     } else {
-      if (prev >= props.searchCol) show = true
+      if (prev >= props.searchCol) {
+        show = true
+      }
     }
     return prev
   }, 0)

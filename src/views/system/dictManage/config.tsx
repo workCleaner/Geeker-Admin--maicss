@@ -28,7 +28,9 @@ export function getConfig(): ProTableProps<DictQuery, DictListItem> {
         label: '状态',
         width: 90,
         render: scope => {
-          if (scope.row.parentId === 0) return '-'
+          if (scope.row.parentId === 0) {
+            return '-'
+          }
           return <ElTag type={scope.row.type as any}>{scope.row.status === 1 ? '启用' : '禁用'}</ElTag>
         },
       },
@@ -45,9 +47,7 @@ export function getConfig(): ProTableProps<DictQuery, DictListItem> {
         },
       },
     ],
-    initParam: {
-      name: 'aa',
-    },
+    initParam: {},
     requestApi: DictAPI.getDictList,
     pagination: true,
     toolbarLeft: ['add', 'delete'],

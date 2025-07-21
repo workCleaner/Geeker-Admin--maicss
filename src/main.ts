@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+// unocss
+import 'uno.css'
 // CSS common style sheet
 import '@/styles/common.scss'
 // element css
@@ -10,8 +12,6 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/element-dark.scss'
 // custom element css
 import '@/styles/element.scss'
-// unocss
-import 'uno.css'
 // element plus
 import ElementPlus from 'element-plus'
 // element icons

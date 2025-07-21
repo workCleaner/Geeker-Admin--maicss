@@ -74,16 +74,16 @@ export interface ColumnProps<T extends DefaultRow = any>
   extends Partial<Omit<TableColumnCtx<T>, 'type' | 'children' | 'renderCell' | 'renderHeader' | 'label'>> {
   type?: TypeProps // 列类型
   tag?: MaybeRef<boolean> // 是否是标签展示
-  isShow?: MaybeRef<boolean> // 是否显示在表格当中
+  isShow?: MaybeRef<boolean> // 是否显示在表格当中，默认值为 true
   isSetting?: MaybeRef<boolean> // 是否在 ColSetting 中可配置
-  search?: SearchProps | undefined // 搜索项配置
+  search?: SearchProps // 搜索项配置
   enum?: EnumProps[] | Ref<EnumProps[]> | ((_params?: any) => Promise<any>) // 枚举字典
   isFilterEnum?: boolean | Ref<boolean> // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据）
   fieldNames?: FieldNamesProps // 指定 label && value && children 的 key 值
   headerRender?: (_scope: HeaderRenderScope<T>) => VNode // 自定义表头内容渲染（tsx语法）
   render?: (_scope: RenderScope<T>) => VNode | string // 自定义单元格内容渲染（tsx语法）
-  _children?: ColumnProps<T>[] // 多级表头
-  label?: string
+  children?: ColumnProps<T>[] // 多级表头
+  label?: MaybeRef<string>
 }
 
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>
@@ -101,6 +101,7 @@ export interface ProTableProps<Q = any, I extends DefaultRow = any, Extra = IObj
         name: string
         text: string
         type: ButtonProps['type']
+        attrs?: Omit<ButtonProps, 'icon' | 'text' | 'type'>
       }
   >
   // 表格工具栏右侧图标
@@ -115,9 +116,10 @@ export interface ProTableProps<Q = any, I extends DefaultRow = any, Extra = IObj
         icon: string
         text?: string
         auth?: string
+        attrs?: Omit<ButtonProps, 'icon' | 'text' | 'circle'>
       }
   >
-  toolbarMiddle?: VNodeChild // 表格工具栏中间内容
+  toolbarMiddle?: VNodeChild | Component // 表格工具栏中间内容
   columns: ColumnProps<I>[] // 列配置项  ==> 必传
   data?: I[] // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi: (_params: Q & Extra) => Promise<ResultPage<I>> // 请求表格数据的 api ==> 非必传

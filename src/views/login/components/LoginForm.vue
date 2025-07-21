@@ -72,9 +72,13 @@ const loginForm = reactive<ReqLoginForm>({
 
 // login
 const login = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   formEl.validate(async valid => {
-    if (!valid) return
+    if (!valid) {
+      return
+    }
     // 1.执行登录接口
     const hashedPassword = await encryptPassword(loginForm.password)
     const { access_token } = await AuthApi.login({ ...loginForm, password: hashedPassword })
@@ -101,7 +105,9 @@ const login = (formEl: FormInstance | undefined) => {
 
 // resetForm
 const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   formEl.resetFields()
 }
 
@@ -109,7 +115,9 @@ onMounted(() => {
   // 监听 enter 事件（调用登录）
   document.onkeydown = (e: KeyboardEvent) => {
     if (e.code === 'Enter' || e.code === 'enter' || e.code === 'NumpadEnter') {
-      if (loading.value) return
+      if (loading.value) {
+        return
+      }
       login(loginFormRef.value)
     }
   }

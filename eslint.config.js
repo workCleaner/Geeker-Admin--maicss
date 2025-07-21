@@ -9,13 +9,14 @@ import prettierPlugin from 'eslint-plugin-prettier'
 
 // 解析自动导入配置
 
-// import fs from 'fs'
-// const autoImportConfig = JSON.parse(fs.readFileSync('.eslintrc-auto-import.json', 'utf-8'))
+import fs from 'fs'
+const autoImportConfig = JSON.parse(fs.readFileSync('.eslintrc-auto-import.json', 'utf-8'))
 
 /** @type {import('eslint').Linter.Config[]} */
 
 // 全局变量
 const GlobalType = {
+  ...autoImportConfig.globals,
   ...globals.browser,
   ...globals.node,
   NodeJS: true,
@@ -103,7 +104,7 @@ export default [
       'vue/component-name-in-template-casing': 'off',
       'vue/require-default-prop': 'off',
       'vue/html-closing-bracket-newline': 'off',
-
+      curly: ['error', 'all'],
       // 一般规则
       'no-console': ['error', { allow: ['error'] }],
       'no-debugger': 'error',

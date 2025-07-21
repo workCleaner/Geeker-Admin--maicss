@@ -51,9 +51,14 @@ export function localClear() {
  * @returns {String}
  */
 export function isType(val: any) {
-  if (val === null) return 'null'
-  if (typeof val !== 'object') return typeof val
-  else return Object.prototype.toString.call(val).slice(8, -1).toLocaleLowerCase()
+  if (val === null) {
+    return 'null'
+  }
+  if (typeof val !== 'object') {
+    return typeof val
+  } else {
+    return Object.prototype.toString.call(val).slice(8, -1).toLocaleLowerCase()
+  }
 }
 
 /**
@@ -63,17 +68,25 @@ export function isType(val: any) {
  * @returns {Boolean} 相同返回 true，反之 false
  */
 export function isObjectValueEqual(a: { [key: string]: any }, b: { [key: string]: any }) {
-  if (!a || !b) return false
+  if (!a || !b) {
+    return false
+  }
   const aProps = Object.getOwnPropertyNames(a)
   const bProps = Object.getOwnPropertyNames(b)
-  if (aProps.length != bProps.length) return false
+  if (aProps.length != bProps.length) {
+    return false
+  }
   for (let i = 0; i < aProps.length; i++) {
     const propName = aProps[i]
     const propA = a[propName]
     const propB = b[propName]
-    if (!b[propName]) return false
+    if (!b[propName]) {
+      return false
+    }
     if (propA instanceof Object) {
-      if (!isObjectValueEqual(propA, propB)) return false
+      if (!isObjectValueEqual(propA, propB)) {
+        return false
+      }
     } else if (propA !== propB) {
       return false
     }
@@ -98,11 +111,21 @@ export function randomNum(min: number, max: number): number {
 export function getTimeState() {
   const timeNow = new Date()
   const hours = timeNow.getHours()
-  if (hours >= 6 && hours <= 10) return `早上好 ⛅`
-  if (hours >= 10 && hours <= 14) return `中午好 🌞`
-  if (hours >= 14 && hours <= 18) return `下午好 🌞`
-  if (hours >= 18 && hours <= 24) return `晚上好 🌛`
-  if (hours >= 0 && hours <= 6) return `凌晨好 🌛`
+  if (hours >= 6 && hours <= 10) {
+    return `早上好 ⛅`
+  }
+  if (hours >= 10 && hours <= 14) {
+    return `中午好 🌞`
+  }
+  if (hours >= 14 && hours <= 18) {
+    return `下午好 🌞`
+  }
+  if (hours >= 18 && hours <= 24) {
+    return `晚上好 🌛`
+  }
+  if (hours >= 0 && hours <= 6) {
+    return `凌晨好 🌛`
+  }
 }
 
 /**
@@ -165,7 +188,9 @@ export function getShowMenuList(menuList: MenuOptions[]) {
 export const getAllBreadcrumbList = (menuList: MenuOptions[], parent = [], result: { [key: string]: any } = {}) => {
   for (const item of menuList) {
     result[item.path] = [...parent, item]
-    if (item.children) getAllBreadcrumbList(item.children, result[item.path], result)
+    if (item.children) {
+      getAllBreadcrumbList(item.children, result[item.path], result)
+    }
   }
   return result
 }
@@ -178,8 +203,12 @@ export const getAllBreadcrumbList = (menuList: MenuOptions[], parent = [], resul
  */
 export function getMenuListPath(menuList: MenuOptions[], menuPathArr: string[] = []): string[] {
   for (const item of menuList) {
-    if (typeof item === 'object' && item.path) menuPathArr.push(item.path)
-    if (item.children?.length) getMenuListPath(item.children, menuPathArr)
+    if (typeof item === 'object' && item.path) {
+      menuPathArr.push(item.path)
+    }
+    if (item.children?.length) {
+      getMenuListPath(item.children, menuPathArr)
+    }
   }
   return menuPathArr
 }
@@ -192,10 +221,14 @@ export function getMenuListPath(menuList: MenuOptions[], menuPathArr: string[] =
  */
 export function findMenuByPath(menuList: MenuOptions[], path: string): MenuOptions | null {
   for (const item of menuList) {
-    if (item.path === path) return item
+    if (item.path === path) {
+      return item
+    }
     if (item.children) {
       const res = findMenuByPath(item.children, path)
-      if (res) return res
+      if (res) {
+        return res
+      }
     }
   }
   return null
@@ -224,7 +257,9 @@ export function getKeepAliveRouterName(menuList: MenuOptions[], keepAliveNameArr
  * */
 export function formatTableColumn(row: number, col: number, callValue: any) {
   // 如果当前值为数组，使用 / 拼接（根据需求自定义）
-  if (isArray(callValue)) return callValue.length ? callValue.join(' / ') : '--'
+  if (isArray(callValue)) {
+    return callValue.length ? callValue.join(' / ') : '--'
+  }
   return callValue ?? '--'
 }
 
@@ -235,7 +270,9 @@ export function formatTableColumn(row: number, col: number, callValue: any) {
  * */
 export function formatValue(callValue: any) {
   // 如果当前值为数组，使用 / 拼接（根据需求自定义）
-  if (isArray(callValue)) return callValue.length ? callValue.join(' / ') : '--'
+  if (isArray(callValue)) {
+    return callValue.length ? callValue.join(' / ') : '--'
+  }
   return callValue ?? '--'
 }
 
@@ -246,7 +283,9 @@ export function formatValue(callValue: any) {
  * @returns {*}
  * */
 export function handleRowAccordingToProp(row: { [key: string]: any }, prop: string) {
-  if (!prop.includes('.')) return row[prop] ?? '--'
+  if (!prop.includes('.')) {
+    return row[prop] ?? '--'
+  }
   prop.split('.').forEach(item => (row = row[item] ?? '--'))
   return row
 }
@@ -258,7 +297,9 @@ export function handleRowAccordingToProp(row: { [key: string]: any }, prop: stri
  * */
 export function handleProp(prop: string) {
   const propArr = prop.split('.')
-  if (propArr.length == 1) return prop
+  if (propArr.length == 1) {
+    return prop
+  }
   return propArr[propArr.length - 1]
 }
 
@@ -276,7 +317,9 @@ export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNam
   const children = fieldNames?.children ?? 'children'
   let filterData: { [key: string]: any } = {}
   // 判断 enumData 是否为数组
-  if (Array.isArray(enumData)) filterData = findItemNested(enumData, callValue, value, children)
+  if (Array.isArray(enumData)) {
+    filterData = findItemNested(enumData, callValue, value, children)
+  }
   // 判断是否输出的结果为 tag 类型
   if (type == 'tag') {
     return filterData?.tagType ? filterData.tagType : ''
@@ -290,9 +333,15 @@ export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNam
  * */
 export function findItemNested(enumData: any, callValue: any, value: string, children: string) {
   return enumData.reduce((accumulator: any, current: any) => {
-    if (accumulator) return accumulator
-    if (current[value] === callValue) return current
-    if (current[children]) return findItemNested(current[children], callValue, value, children)
+    if (accumulator) {
+      return accumulator
+    }
+    if (current[value] === callValue) {
+      return current
+    }
+    if (current[children]) {
+      return findItemNested(current[children], callValue, value, children)
+    }
   }, null)
 }
 

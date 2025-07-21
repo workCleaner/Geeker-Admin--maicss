@@ -13,17 +13,16 @@
         <select-filter :data="selectFilterData" :default-values="selectFilterValues" @change="changeSelectFilter" />
       </div>
       <pro-table
-        ref="proTable"
+        ref="proTableRef"
         highlight-current-row
         :columns="columns"
         :request-api="UserAPI.getUserList"
         :init-param="Object.assign(treeFilterValues, selectFilterValues)"
       >
         <!-- 表格 header 按钮 -->
-        <template #tableHeader>
+        <template #toolbarLeft>
           <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 新增用户 </el-button>
           <el-button type="primary" :icon="Upload" plain @click="batchAdd"> 批量添加用户 </el-button>
-          <el-button type="primary" :icon="Download" plain @click="downloadFile"> 导出用户数据 </el-button>
           <el-button type="primary" :icon="Pointer" plain @click="setCurrent"> 选中第四行 </el-button>
         </template>
         <!-- 表格操作 -->
@@ -41,35 +40,44 @@
 </template>
 <script setup lang="ts">
 defineOptions({ name: 'UseSelectFilter' })
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch, computed } from 'vue'
 import type { ResUserList } from '@/api/system/user'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useHandleData } from '@/hooks/useHandleData'
-import { useDownload } from '@/hooks/useDownload'
 import { genderType, userStatus } from '@/utils/dict'
 import TreeFilter from '@/components/TreeFilter/index.vue'
 import ImportExcel from '@/components/ImportExcel/index.vue'
 import UserDrawer from '@/views/proTable/components/UserDrawer.vue'
 import SelectFilter from '@/components/SelectFilter/index.vue'
 import type { ProTableInstance, ColumnProps } from '@/components/ProTable/interface'
-import { CirclePlus, Delete, EditPen, Pointer, Download, Upload, View, Refresh } from '@element-plus/icons-vue'
+import { CirclePlus, Delete, EditPen, Pointer, Upload, View, Refresh } from '@element-plus/icons-vue'
 import { UserAPI } from '@/api/system/user'
+import { useI18n } from 'vue-i18n'
 
 // ProTable 实例
-const proTable = ref<ProTableInstance>()
+const proTableRef = ref<ProTableInstance>()
+
+const { t } = useI18n()
 
 // 表格配置项
-const columns = reactive<ColumnProps<ResUserList>[]>([
-  { type: 'radio', label: '单选', width: 80 },
-  { type: 'index', label: '#', width: 80 },
-  { prop: 'username', label: '用户姓名', width: 120 },
-  { prop: 'gender', label: '性别', width: 120, sortable: true, enum: genderType },
-  { prop: 'idCard', label: '身份证号' },
-  { prop: 'email', label: '邮箱' },
-  { prop: 'address', label: '居住地址' },
-  { prop: 'status', label: '用户状态', width: 120, sortable: true, tag: true, enum: userStatus },
-  { prop: 'createTime', label: '创建时间', width: 180, sortable: true },
-  { prop: 'operation', label: '操作', width: 330, fixed: 'right' },
+const columns = ref<ColumnProps<ResUserList>[]>([
+  { type: 'radio', label: computed(() => t('common.radio')), width: 80 },
+  { type: 'index', label: computed(() => t('common.index')), width: 80 },
+  { prop: 'username', label: computed(() => t('common.username')), width: 120 },
+  { prop: 'gender', label: computed(() => t('common.gender')), width: 120, sortable: true, enum: genderType },
+  { prop: 'idCard', label: computed(() => t('common.idCard')) },
+  { prop: 'email', label: computed(() => t('common.email')) },
+  { prop: 'address', label: computed(() => t('common.address')) },
+  {
+    prop: 'status',
+    label: computed(() => t('common.userStatus')),
+    width: 120,
+    sortable: true,
+    tag: true,
+    enum: userStatus,
+  },
+  { prop: 'createTime', label: computed(() => t('common.createTime')), width: 180, sortable: true },
+  { prop: 'operation', label: computed(() => t('common.operation')), width: 330, fixed: 'right' },
 ])
 
 // selectFilter 数据（用户角色为后台数据）
@@ -95,7 +103,9 @@ const selectFilterData = reactive([
 ])
 
 // 获取用户角色字典
-onMounted(() => getUserRoleDict())
+onMounted(() => {
+  getUserRoleDict()
+})
 const getUserRoleDict = async () => {
   const data = await UserAPI.getUserRole()
   selectFilterData[1].options = data as any
@@ -105,7 +115,7 @@ const getUserRoleDict = async () => {
 const selectFilterValues = ref({ userStatus: '2', userRole: ['1', '3'] })
 const changeSelectFilter = (value: typeof selectFilterValues.value) => {
   ElMessage.success('请注意查看请求参数变化 🤔')
-  proTable.value!.pageable.pageNum = 1
+  proTableRef.value!.pageable.pageNum = 1
   selectFilterValues.value = value
 }
 
@@ -113,38 +123,38 @@ const changeSelectFilter = (value: typeof selectFilterValues.value) => {
 const treeFilterValues = reactive({ departmentId: ['11'] })
 const changeTreeFilter = (val: string[]) => {
   ElMessage.success('请注意查看请求参数变化 🤔')
-  proTable.value!.pageable.pageNum = 1
+  proTableRef.value!.pageable.pageNum = 1
   treeFilterValues.departmentId = val
 }
 
+// const toolbarClick = ({ name, payload }: { name: string; payload?: any }) => {
+//   if (name === 'select') {
+//     proTableRef.value!.radio = proTableRef.value?.tableData[3].id
+//     proTableRef.value?.element?.setCurrentRow(proTableRef.value?.tableData[3])
+//   }
+// }
+
 // 选择行
 const setCurrent = () => {
-  proTable.value!.radio = proTable.value?.tableData[3].id
-  proTable.value?.element?.setCurrentRow(proTable.value?.tableData[3])
+  proTableRef.value!.radio = proTableRef.value?.tableData[3].id
+  proTableRef.value?.element?.setCurrentRow(proTableRef.value?.tableData[3])
 }
 
 watch(
-  () => proTable.value?.radio,
-  () => proTable.value?.radio && ElMessage.success(`选中 id 为【${proTable.value?.radio}】的数据`)
+  () => proTableRef.value?.radio,
+  () => proTableRef.value?.radio && ElMessage.success(`选中 id 为【${proTableRef.value?.radio}】的数据`)
 )
 
 // 删除用户信息
 const deleteAccount = async (params: ResUserList) => {
   await useHandleData(UserAPI.deleteUser, { id: [params.id] }, `删除【${params.username}】用户`)
-  proTable.value?.getTableList()
+  proTableRef.value?.getTableList()
 }
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useHandleData(UserAPI.resetUserPassWord, { id: params.id }, `重置【${params.username}】用户密码`)
-  proTable.value?.getTableList()
-}
-
-// 导出用户列表
-const downloadFile = async () => {
-  ElMessageBox.confirm('确认导出用户数据?', '温馨提示', { type: 'warning' }).then(() =>
-    useDownload(UserAPI.exportUserInfo, '用户列表', proTable.value?.searchParam)
-  )
+  proTableRef.value?.getTableList()
 }
 
 // 批量添加用户
@@ -154,7 +164,7 @@ const batchAdd = () => {
     title: '用户',
     tempApi: UserAPI.exportUserInfo,
     importApi: UserAPI.batchAddUser,
-    getTableList: proTable.value?.getTableList,
+    getTableList: proTableRef.value?.getTableList,
   }
   dialogRef.value?.acceptParams(params)
 }
@@ -167,7 +177,7 @@ const openDrawer = (title: string, row: Partial<ResUserList> = {}) => {
     isView: title === '查看',
     row: { ...row },
     api: title === '新增' ? UserAPI.addUser : title === '编辑' ? UserAPI.editUser : undefined,
-    getTableList: proTable.value?.getTableList,
+    getTableList: proTableRef.value?.getTableList,
   }
   drawerRef.value?.acceptParams(params)
 }

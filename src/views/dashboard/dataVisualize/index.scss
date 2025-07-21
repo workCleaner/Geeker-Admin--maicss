@@ -5,7 +5,6 @@
     margin-bottom: 10px;
     .top-title {
       margin-bottom: 10px;
-      font-family: DIN;
       font-size: 18px;
       font-weight: bold;
     }
@@ -22,7 +21,6 @@
         background-size: cover;
         border-radius: 20px;
         .left-title {
-          font-family: DIN;
           font-size: 20px;
         }
         .img-box {
@@ -42,7 +40,6 @@
         }
         .left-number {
           overflow: hidden;
-          font-family: DIN;
           font-size: 62px;
         }
       }
@@ -76,14 +73,12 @@
         }
         .item-value {
           margin-bottom: 4px;
-          font-family: DIN;
           font-size: 28px;
           font-weight: bold;
           color: #1a1a37;
         }
         .traffic-name {
           overflow: hidden;
-          font-family: DIN;
           font-size: 15px;
           color: #1a1a37;
           white-space: nowrap;
@@ -119,7 +114,6 @@
         border-radius: 25px;
         .echarts-title {
           padding: 15px 20px;
-          font-family: DIN;
           font-size: 18px;
           font-weight: bold;
           border-bottom: 1px solid var(--el-border-color);
@@ -138,7 +132,6 @@
       position: absolute;
       top: 75px;
       left: 50px;
-      font-family: DIN;
       font-size: 18px;
       font-weight: bold;
     }

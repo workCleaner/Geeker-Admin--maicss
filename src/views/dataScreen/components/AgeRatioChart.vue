@@ -42,7 +42,9 @@ const option: ECOption = {
     formatter: function (name: string) {
       let text = ''
       data.forEach((val: ChartProp) => {
-        if (val.name === name) text = ' ' + name + '　 ' + val.percentage
+        if (val.name === name) {
+          text = ' ' + name + '　 ' + val.percentage
+        }
       })
       return text
     },

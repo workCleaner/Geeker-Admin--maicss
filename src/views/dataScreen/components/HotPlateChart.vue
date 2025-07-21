@@ -211,7 +211,9 @@ const option: ECOption = {
       type: 'bar',
       yAxisIndex: 1,
       data: data.map((val: ChartProp) => {
-        if (!val.maxValue) return 5
+        if (!val.maxValue) {
+          return 5
+        }
         return val.maxValue
       }),
       barWidth: 18,

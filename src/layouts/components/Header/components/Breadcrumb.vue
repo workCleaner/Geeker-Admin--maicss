@@ -44,7 +44,9 @@ const breadcrumbList = computed(() => {
 
 // Click Breadcrumb
 const onBreadcrumbClick = (item: MenuOptions, index: number) => {
-  if (index !== breadcrumbList.value.length - 1) router.push(item.path)
+  if (index !== breadcrumbList.value.length - 1) {
+    router.push(item.path)
+  }
 }
 </script>
 

@@ -81,8 +81,11 @@ const treeAllData = ref<{ [key: string]: any }[]>([])
 
 const selected = ref()
 const setSelected = () => {
-  if (props.multiple) selected.value = Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
-  else selected.value = typeof props.defaultValue === 'string' ? props.defaultValue : ''
+  if (props.multiple) {
+    selected.value = Array.isArray(props.defaultValue) ? props.defaultValue : [props.defaultValue]
+  } else {
+    selected.value = typeof props.defaultValue === 'string' ? props.defaultValue : ''
+  }
 }
 
 onBeforeMount(async () => {
@@ -119,7 +122,9 @@ watch(filterText, val => {
 
 // 过滤
 const filterNode = (value: string, data: { [key: string]: any }, node: any) => {
-  if (!value) return true
+  if (!value) {
+    return true
+  }
   let parentNode = node.parent,
     labels = [node.label],
     level = 1
@@ -134,7 +139,9 @@ const filterNode = (value: string, data: { [key: string]: any }, node: any) => {
 // 切换树节点的展开或折叠状态
 const toggleTreeNodes = (isExpand: boolean) => {
   let nodes = treeRef.value?.store.nodesMap
-  if (!nodes) return
+  if (!nodes) {
+    return
+  }
   for (const node in nodes) {
     if (Object.prototype.hasOwnProperty.call(nodes, node)) {
       nodes[node].expanded = isExpand
@@ -149,7 +156,9 @@ const emit = defineEmits<{
 
 // 单选
 const handleNodeClick = (data: { [key: string]: any }) => {
-  if (props.multiple) return
+  if (props.multiple) {
+    return
+  }
   emit('change', data[props.id])
 }
 

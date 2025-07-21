@@ -97,7 +97,9 @@ const acceptParams = (params: DrawerProps) => {
 const ruleFormRef = ref<FormInstance>()
 const handleSubmit = () => {
   ruleFormRef.value!.validate(async valid => {
-    if (!valid) return
+    if (!valid) {
+      return
+    }
     try {
       await drawerProps.value.api!(drawerProps.value.row)
       ElMessage.success({ message: `${drawerProps.value.title}用户成功！` })

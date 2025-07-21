@@ -139,12 +139,12 @@
     table {
       width: 100%;
     }
-    .el-table__header th {
+    .el-table__header th.el-table__cell {
       height: 45px;
       font-size: 15px;
       font-weight: bold;
       color: var(--el-text-color-primary);
-      background: var(--el-fill-color-light);
+      background-color: var(--el-fill-color-light);
     }
     .el-table__row {
       height: 45px;

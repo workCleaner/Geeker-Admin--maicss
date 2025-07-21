@@ -96,12 +96,16 @@ watch(searchMenu, debouncedUpdateSearchList)
 const menuListRef = ref<Element | null>(null)
 const keyPressUpOrDown = (direction: number) => {
   const length = searchList.value.length
-  if (length === 0) return
+  if (length === 0) {
+    return
+  }
   const index = searchList.value.findIndex(item => item.path === activePath.value)
   const newIndex = (index + direction + length) % length
   activePath.value = searchList.value[newIndex].path
   nextTick(() => {
-    if (!menuListRef.value?.firstElementChild) return
+    if (!menuListRef.value?.firstElementChild) {
+      return
+    }
     const menuItemHeight = menuListRef.value.firstElementChild.clientHeight + 12 || 0
     menuListRef.value.scrollTop = newIndex * menuItemHeight
   })
@@ -122,9 +126,14 @@ const keyboardOperation = (event: KeyboardEvent) => {
 
 const handleClickMenu = () => {
   const menu = searchList.value.find(item => item.path === activePath.value)
-  if (!menu) return
-  if (menu.meta?.isLink) window.open(menu.meta.isLink, '_blank')
-  else router.push(menu.path)
+  if (!menu) {
+    return
+  }
+  if (menu.meta?.isLink) {
+    window.open(menu.meta.isLink, '_blank')
+  } else {
+    router.push(menu.path)
+  }
   searchMenu.value = ''
   isShowSearch.value = false
 }

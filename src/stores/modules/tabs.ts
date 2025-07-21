@@ -26,9 +26,13 @@ export const useTabsStore = defineStore('geeker-tabs', {
     async removeTabs(tabPath: string, isCurrent: boolean = true) {
       if (isCurrent) {
         this.tabsMenuList.forEach((item, index) => {
-          if (item.path !== tabPath) return
+          if (item.path !== tabPath) {
+            return
+          }
           const nextTab = this.tabsMenuList[index + 1] || this.tabsMenuList[index - 1]
-          if (!nextTab) return
+          if (!nextTab) {
+            return
+          }
           router.push(nextTab.path)
         })
       }
@@ -67,7 +71,9 @@ export const useTabsStore = defineStore('geeker-tabs', {
     // Set Tabs Title
     async setTabsTitle(title: string) {
       this.tabsMenuList.forEach(item => {
-        if (item.path == getUrlWithParams()) item.title = title
+        if (item.path == getUrlWithParams()) {
+          item.title = title
+        }
       })
     },
   },

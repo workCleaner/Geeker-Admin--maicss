@@ -14,7 +14,7 @@
       @row-click="rowClick"
     >
       <!-- 表格 header 按钮 -->
-      <template #tableHeader="scope">
+      <template #toolbarLeft="scope">
         <el-button type="primary" :icon="CirclePlus" @click="proTable?.element?.toggleAllSelection">
           全选 / 全不选
         </el-button>
@@ -76,14 +76,14 @@ const headerRender = (scope: HeaderRenderScope<ResUserList>) => {
 
 // 表格配置项
 const columns = reactive<ColumnProps<ResUserList>[]>([
-  { type: 'selection', width: 80 },
-  { type: 'index', label: '#', width: 80 },
+  { type: 'index', label: '#', width: 60 },
+  { type: 'selection', width: 60 },
   { type: 'expand', label: 'Expand', width: 100 },
   {
     prop: 'base',
     label: '基本信息',
     headerRender,
-    _children: [
+    children: [
       { prop: 'username', label: '用户姓名', width: 110 },
       { prop: 'user.detail.age', label: '年龄', width: 100 },
       {
@@ -96,7 +96,7 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
       {
         prop: 'details',
         label: '详细资料',
-        _children: [
+        children: [
           { prop: 'idCard', label: '身份证号' },
           { prop: 'email', label: '邮箱' },
           { prop: 'address', label: '居住地址' },
@@ -130,8 +130,14 @@ const getSummaries = (param: SummaryMethodProps) => {
   const { columns } = param
   const sums: string[] = []
   columns.forEach((column, index) => {
-    if (index === 0) return (sums[index] = '合计')
-    else sums[index] = 'N/A'
+    if (index === 0) {
+      return (sums[index] = '合计')
+    } else if (column.property === 'user.detail.age') {
+      const values = param.data.map(item => Number(item.user?.detail?.age))
+      sums[index] = values.reduce((a, b) => a + b, 0).toString()
+    } else {
+      sums[index] = 'N/A'
+    }
   })
   return sums
 }
@@ -145,21 +151,30 @@ interface SpanMethodProps {
 }
 const objectSpanMethod = ({ rowIndex, columnIndex }: SpanMethodProps) => {
   if (columnIndex === 3) {
-    if (rowIndex % 2 === 0) return { rowspan: 2, colspan: 1 }
-    else return { rowspan: 0, colspan: 0 }
+    if (rowIndex % 2 === 0) {
+      return { rowspan: 2, colspan: 1 }
+    } else {
+      return { rowspan: 0, colspan: 0 }
+    }
   }
 }
 
 // 设置列样式
 const tableRowClassName = ({ rowIndex }: { row: ResUserList; rowIndex: number }) => {
-  if (rowIndex === 2) return 'warning-row'
-  if (rowIndex === 6) return 'success-row'
+  if (rowIndex === 2) {
+    return 'warning-row'
+  }
+  if (rowIndex === 6) {
+    return 'success-row'
+  }
   return ''
 }
 
 // 单击行
 const rowClick = (row: ResUserList, column: TableColumnCtx<ResUserList>) => {
-  if (column.property == 'radio' || column.property == 'operation') return
+  if (column.property == 'radio' || column.property == 'operation') {
+    return
+  }
   ElMessage.success('当前行被点击了！' + row.id)
 }
 

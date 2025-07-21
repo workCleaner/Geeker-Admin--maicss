@@ -196,7 +196,6 @@ const option = {
     width: 52px;
     height: 50px;
     margin-right: 1px;
-    font-family: MetroDF;
     font-size: 32px;
     color: #66ffff;
     background: url('../images/total.png') no-repeat;

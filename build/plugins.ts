@@ -43,6 +43,14 @@ export const createVitePlugins = (viteEnv: ViteEnv): (PluginOption | PluginOptio
     // 自动导入组件 https://github.com/element-plus/element-plus-vite-starter/blob/main/vite.config.ts
     AutoImport({
       imports: ['vue'],
+      dumpUnimportItems: false,
+      viteOptimizeDeps: true,
+      vueTemplate: true,
+      eslintrc: {
+        enabled: false,
+        filepath: './.eslintrc-auto-import.json',
+        globalsPropValue: true,
+      },
       resolvers: [ElementPlusResolver()],
       dts: 'src/types/auto-imports.d.ts',
     }),

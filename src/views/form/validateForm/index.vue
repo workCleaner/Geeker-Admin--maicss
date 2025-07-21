@@ -103,7 +103,9 @@ const rules = reactive<FormRules>({
 })
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   await formEl.validate((valid, fields) => {
     if (valid) {
       ElMessage.success('提交的数据为 : ' + JSON.stringify(ruleForm))
@@ -114,7 +116,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  if (!formEl) {
+    return
+  }
   formEl.resetFields()
 }
 </script>

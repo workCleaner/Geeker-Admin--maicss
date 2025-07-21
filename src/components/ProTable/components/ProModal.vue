@@ -221,7 +221,9 @@ const setFormData = (data: IObject) => {
 // 表单提交
 const handleSubmit = useThrottleFn(() => {
   formRef.value?.validate((valid: boolean) => {
-    if (!valid) return
+    if (!valid) {
+      return
+    }
     if (typeof props.modalConfig.beforeSubmit === 'function') {
       props.modalConfig.beforeSubmit(formData)
     }

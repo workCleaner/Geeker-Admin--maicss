@@ -2,13 +2,20 @@
   <div class="table-box">
     <ProTable ref="proTable" v-bind="tableConfig" @drag-sort="sortTable" @toolbar-click="toolbarClickHandler">
       <!-- 表格 header 按钮 -->
-      <template #tableHeader="scope">
+      <template #toolbarLeft="scope">
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus" @click="openDrawer('新增')">新增用户</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain @click="batchAdd">批量添加用户</el-button>
         <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">
           导出用户数据
         </el-button>
-        <el-button type="primary" plain @click="toDetail">To 子集详情页面</el-button>
+        <el-button
+          type="primary"
+          plain
+          :disabled="!scope.isSelected && scope.selectedListIds.length === 0"
+          @click="toDetail(scope.selectedListIds)"
+        >
+          To 子集详情页面
+        </el-button>
         <el-button
           type="danger"
           :icon="Delete"
@@ -67,8 +74,8 @@ import getTableConfig from './config'
 const router = useRouter()
 
 // 跳转详情页
-const toDetail = () => {
-  router.push(`/proTable/useProTable/detail/${Math.random().toFixed(3)}?params=detail-page`)
+const toDetail = (ids: string[]) => {
+  router.push(`/proTable/useProTable/detail/${ids.join(',')}/?params=detail-page`)
 }
 
 // ProTable 实例

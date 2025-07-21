@@ -11,6 +11,7 @@ export const toolbarButtonsConfig: Record<
     name: string
     text: string
     type: ButtonProps['type']
+    attrs?: Omit<ButtonProps, 'icon' | 'text' | 'type'>
   }
 > = {
   // 默认左边按钮

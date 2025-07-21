@@ -60,7 +60,9 @@ const menuList = computed(() => authStore.showMenuListGet)
 const activeMenu = computed(() => (route.meta.activeMenu ? route.meta.activeMenu : route.path) as string)
 
 const handleClickMenu = (subItem: MenuOptions) => {
-  if (subItem.meta.isLink) return window.open(subItem.meta.isLink, '_blank')
+  if (subItem.meta.isLink) {
+    return window.open(subItem.meta.isLink, '_blank')
+  }
   router.push(subItem.path)
 }
 </script>

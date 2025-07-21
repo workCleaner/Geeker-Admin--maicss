@@ -23,10 +23,19 @@
             :type="item.type"
             :auth="item.auth"
             :loading="loading"
+            v-bind="item.attrs"
             @click="handleToolbarClick(item.name)"
           >
             {{ item.text }}
           </el-button>
+        </template>
+        <template v-if="toolbarLeftArr.length === 0">
+          <slot
+            name="toolbarLeft"
+            :selected-list="selectedList"
+            :selected-list-ids="selectedListIds"
+            :is-selected="isSelected"
+          />
         </template>
       </div>
       <div v-if="toolbarMiddle" class="header-button-middle">
@@ -43,6 +52,11 @@
             @click="handleToolbarClick(item.name)"
           />
         </template>
+        <template v-if="toolbarRightArr.length === 0">
+          <slot name="toolbarRight">
+            <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting" />
+          </slot>
+        </template>
       </div>
     </div>
     <!-- 表格主体 -->
@@ -57,32 +71,34 @@
     >
       <!-- 默认插槽 -->
       <slot></slot>
-      <template v-for="item in tableColumns" :key="item">
+      <template v-for="{ label, ...item } in tableColumns" :key="item.prop">
         <!-- selection || radio || index || expand || sort -->
         <el-table-column
           v-if="item.type && columnTypes.includes(item.type)"
           v-bind="item"
+          :label="unref(label)"
           :align="item.align ?? 'center'"
-          :reserve-selection="item.type == 'selection'"
+          :reserve-selection="item.type === 'selection'"
         >
           <template #default="scope">
             <!-- expand -->
-            <template v-if="item.type == 'expand'">
+            <template v-if="item.type === 'expand'">
               <component :is="item.render" v-bind="scope" v-if="item.render" />
               <slot v-else :name="item.type" v-bind="scope"></slot>
             </template>
             <!-- radio -->
-            <el-radio v-if="item.type == 'radio'" v-model="radio" :value="scope.row[rowKey]">
+            <el-radio v-if="item.type === 'radio'" v-model="radio" :value="scope.row[rowKey]">
               <i></i>
             </el-radio>
             <!-- sort -->
-            <el-tag v-if="item.type == 'sort'" class="move">
+            <el-tag v-if="item.type === 'sort'" class="move">
               <el-icon> <DCaret /></el-icon>
             </el-tag>
           </template>
         </el-table-column>
         <!-- other -->
-        <table-column v-else :column="item">
+        <table-column v-else :column="{ ...item, label: unref(label) }">
+          <!-- @ts-ignore -->
           <template v-for="slotName in Object.keys($slots)" #[slotName]="scope">
             <slot :name="slotName" v-bind="scope"></slot>
           </template>
@@ -122,7 +138,6 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'ProTable' })
-import { ref, watch, provide, onMounted, unref, computed, shallowReactive } from 'vue'
 import { ElTable } from 'element-plus'
 import { useTable } from '@/hooks/useTable'
 import { useSelection } from '@/hooks/useSelection'
@@ -134,6 +149,7 @@ import ColSetting from './components/ColSetting.vue'
 import TableColumn from './components/TableColumn'
 import Sortable from 'sortablejs'
 import { toolbarButtonsConfig } from '@/utils/proTable'
+import { Operation } from '@element-plus/icons-vue'
 
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
@@ -176,7 +192,9 @@ const searchFormRef = ref<InstanceType<typeof SearchForm>>()
 const radio = ref('')
 
 const toolbarLeftArr = computed(() => {
-  if (!props.toolbarLeft) return []
+  if (!props.toolbarLeft) {
+    return []
+  }
   return props.toolbarLeft.map(item => {
     if (typeof item === 'string') {
       return toolbarButtonsConfig[item]
@@ -187,7 +205,10 @@ const toolbarLeftArr = computed(() => {
 })
 
 const toolbarRightArr = computed(() => {
-  if (!props.toolbarRight) return [toolbarButtonsConfig.layout, toolbarButtonsConfig.search]
+  // default toolbarRight is [layout]
+  if (!props.toolbarRight) {
+    return [toolbarButtonsConfig.layout]
+  }
   return props.toolbarRight.map(item => {
     if (typeof item === 'string') {
       return toolbarButtonsConfig[item]
@@ -220,6 +241,7 @@ const handleToolbarClick = (name: string) => {
       isShowSearch.value = !isShowSearch.value
       break
     default:
+      payload.name = name
       break
   }
   emit('toolbarClick', payload)
@@ -250,8 +272,12 @@ onMounted(() => {
 
 // 处理表格数据
 const processTableData = computed(() => {
-  if (!props.data) return tableData.value
-  if (!props.pagination) return props.data
+  if (!props.data) {
+    return tableData.value
+  }
+  if (!props.pagination) {
+    return props.data
+  }
   return props.data.slice(
     (pageable.value.pageNum - 1) * pageable.value.pageSize,
     pageable.value.pageSize * pageable.value.pageNum
@@ -266,21 +292,27 @@ watch(
 )
 
 // 接收 columns 并设置为响应式
-const tableColumns = shallowReactive(props.columns)
+const tableColumns = computed(() => props.columns)
 
 // 扁平化 columns
-const flatColumns = computed(() => flatColumnsFunc(tableColumns))
+const flatColumns = computed(() => flatColumnsFunc(tableColumns.value))
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>())
 const setEnumMap = async ({ prop, enum: enumValue }: ColumnProps) => {
-  if (!enumValue) return
+  if (!enumValue) {
+    return
+  }
 
   // 如果当前 enumMap 存在相同的值 return
-  if (enumMap.value.has(prop!) && (typeof enumValue === 'function' || enumMap.value.get(prop!) === enumValue)) return
+  if (enumMap.value.has(prop!) && (typeof enumValue === 'function' || enumMap.value.get(prop!) === enumValue)) {
+    return
+  }
 
   // 当前 enum 为静态数据，则直接存储到 enumMap
-  if (typeof enumValue !== 'function') return enumMap.value.set(prop!, unref(enumValue!))
+  if (typeof enumValue !== 'function') {
+    return enumMap.value.set(prop!, unref(enumValue!))
+  }
 
   // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
   enumMap.value.set(prop!, [])
@@ -296,7 +328,9 @@ provide('enumMap', enumMap)
 // 扁平化 columns 的方法
 const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) => {
   columns.forEach(async col => {
-    if (col._children?.length) flatArr.push(...flatColumnsFunc(col._children))
+    if (col.children?.length) {
+      flatArr.push(...flatColumnsFunc(col.children))
+    }
     flatArr.push(col)
 
     // column 添加默认 isShow && isSetting && isFilterEnum 属性值
@@ -307,7 +341,7 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
     // 设置 enumMap
     await setEnumMap(col)
   })
-  return flatArr.filter(item => !item._children?.length)
+  return flatArr.filter(item => !item.children?.length)
 }
 
 // 过滤需要搜索的配置项 && 排序
@@ -335,7 +369,7 @@ const setSearchParamForm = (key: string, value: any) => {
 
 // 列设置 ==> 需要过滤掉不需要设置的列
 const colRef = ref()
-const colSetting = tableColumns!.filter(item => {
+const colSetting = tableColumns.value.filter(item => {
   const { type, prop, isSetting } = item
   return !columnTypes.includes(type!) && prop !== 'operation' && isSetting
 })
@@ -346,7 +380,7 @@ const emit = defineEmits<{
   search: []
   reset: []
   dragSort: [{ newIndex?: number; oldIndex?: number }]
-  toolbarClick: [{ name: string; params?: any }]
+  toolbarClick: [{ name: string; payload?: any }]
 }>()
 
 const _search = () => {

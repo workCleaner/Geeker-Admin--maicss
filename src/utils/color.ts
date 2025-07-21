@@ -7,7 +7,9 @@ import { ElMessage } from 'element-plus'
  */
 export function hexToRgb(str: string) {
   const reg = /^#[0-9A-Fa-f]{6}$/
-  if (!reg.test(str)) return ElMessage.warning('输入错误的hex')
+  if (!reg.test(str)) {
+    return ElMessage.warning('输入错误的hex')
+  }
   return str
     .replace('#', '')
     .match(/../g)

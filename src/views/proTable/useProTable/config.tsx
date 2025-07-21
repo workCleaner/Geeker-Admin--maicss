@@ -112,11 +112,11 @@ const getTableConfig = ({
       },
       { prop: 'operation', label: '操作', fixed: 'right', width: 330 },
     ],
-    toolbarLeft: [
-      'add',
-      { auth: 'batchAdd', name: 'batchAdd', text: '批量添加用户', icon: 'Upload', type: 'primary' },
-      'delete',
-    ],
+    // toolbarLeft: [
+    //   'add',
+    //   { auth: 'batchAdd', name: 'batchAdd', text: '批量添加用户', icon: 'Upload', type: 'primary' },
+    //   'delete',
+    // ],
     toolbarRight: ['search', 'export', 'refresh', 'layout'],
     requestApi: getTableList,
     initParam: reactive({ status: 1 }),

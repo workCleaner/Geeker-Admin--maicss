@@ -79,12 +79,16 @@ watch(
   () => [menuList, route],
   () => {
     // 当前菜单没有数据直接 return
-    if (!menuList.value.length) return
+    if (!menuList.value.length) {
+      return
+    }
     splitActive.value = route.path
     const menuItem = menuList.value.filter((item: MenuOptions) => {
       return route.path === item.path || `/${route.path.split('/')[1]}` === item.path
     })
-    if (menuItem[0].children?.length) return (subMenuList.value = menuItem[0].children)
+    if (menuItem[0].children?.length) {
+      return (subMenuList.value = menuItem[0].children)
+    }
     subMenuList.value = []
   },
   {
@@ -96,7 +100,9 @@ watch(
 // change SubMenu
 const changeSubMenu = (item: MenuOptions) => {
   splitActive.value = item.path
-  if (item.children?.length) return (subMenuList.value = item.children)
+  if (item.children?.length) {
+    return (subMenuList.value = item.children)
+  }
   subMenuList.value = []
   router.push(item.path)
 }

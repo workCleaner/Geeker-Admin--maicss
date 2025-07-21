@@ -10,7 +10,6 @@
     <div class="table-box">
       <ProTable
         ref="proTable"
-        page-auth-id="pro-table:tre-pro-table"
         row-key="id"
         :indent="20"
         :columns="columns"
@@ -20,7 +19,7 @@
         :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }"
       >
         <!-- 表格 header 按钮 -->
-        <template #tableHeader>
+        <template #toolbarLeft>
           <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增')">新增用户</el-button>
         </template>
         <!-- 表格操作 -->
@@ -94,7 +93,9 @@ const loading = ref(false)
 const filterGenderEnum = ref<typeof genderType>([])
 const remoteMethod = (query: string) => {
   filterGenderEnum.value = []
-  if (!query) return
+  if (!query) {
+    return
+  }
   loading.value = true
   setTimeout(() => {
     loading.value = false
@@ -123,7 +124,6 @@ const columns = reactive<ColumnProps<ResUserList>[]>([
         remoteMethod,
       },
     },
-    render: scope => (scope.row.gender === 1 ? '男' : '女'),
   },
   { prop: 'idCard', label: '身份证号' },
   { prop: 'email', label: '邮箱' },

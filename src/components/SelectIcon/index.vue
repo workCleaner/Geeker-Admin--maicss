@@ -110,7 +110,9 @@ const clearIcon = () => {
 // 监听搜索框值
 const inputValue = ref('')
 const iconsList = computed(() => {
-  if (!inputValue.value) return allIcons.value
+  if (!inputValue.value) {
+    return allIcons.value
+  }
   return allIcons.value.filter(item => item.label.toLowerCase().includes(inputValue.value.toLowerCase()))
 })
 </script>

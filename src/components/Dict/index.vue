@@ -46,8 +46,12 @@ const emit = defineEmits<{
 }>()
 
 const localType = computed(() => {
-  if (type) return type
-  if (options.length <= 3) return 'radio'
+  if (type) {
+    return type
+  }
+  if (options.length <= 3) {
+    return 'radio'
+  }
   return 'select'
 })
 

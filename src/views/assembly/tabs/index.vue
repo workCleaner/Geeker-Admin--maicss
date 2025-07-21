@@ -60,7 +60,9 @@ const refresh = () => {
 // 设置 Tab 标题
 const tabsTitle = ref('')
 const editTabsTitle = () => {
-  if (!tabsTitle.value) return ElMessage.warning('请输入标题')
+  if (!tabsTitle.value) {
+    return ElMessage.warning('请输入标题')
+  }
   tabStore.setTabsTitle(tabsTitle.value)
 }
 
@@ -71,7 +73,9 @@ const maximize = () => {
 
 // 关闭当前页
 const closeCurrentTab = () => {
-  if (route.meta.isAffix) return
+  if (route.meta.isAffix) {
+    return
+  }
   tabStore.removeTabs(route.fullPath)
 }
 

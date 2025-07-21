@@ -102,13 +102,14 @@ watch(
 const beforeUpload: UploadProps['beforeUpload'] = rawFile => {
   const imgSize = rawFile.size / 1024 / 1024 < props.fileSize
   const imgType = props.fileType.includes(rawFile.type as ImageMimeType)
-  if (!imgType)
+  if (!imgType) {
     ElNotification({
       title: '温馨提示',
       message: '上传图片不符合所需的格式！',
       type: 'warning',
     })
-  if (!imgSize)
+  }
+  if (!imgSize) {
     setTimeout(() => {
       ElNotification({
         title: '温馨提示',
@@ -116,6 +117,7 @@ const beforeUpload: UploadProps['beforeUpload'] = rawFile => {
         type: 'warning',
       })
     }, 0)
+  }
   return imgType && imgSize
 }
 
@@ -144,7 +146,9 @@ const emit = defineEmits<{
   'update:fileList': [value: UploadUserFile[]]
 }>()
 const uploadSuccess = (response: { fileUrl: string } | undefined, uploadFile: UploadFile) => {
-  if (!response) return
+  if (!response) {
+    return
+  }
   uploadFile.url = response.fileUrl
   emit('update:fileList', _fileList.value)
   // 调用 el-form 内部的校验方法（可自动校验）

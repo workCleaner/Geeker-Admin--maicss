@@ -49,7 +49,9 @@ watch(props, () => {
 const handleClick = (event: ECElementEvent) => props.onClick && props.onClick(event)
 
 const init = () => {
-  if (!chartRef.value) return
+  if (!chartRef.value) {
+    return
+  }
   chartInstance.value = echarts.getInstanceByDom(chartRef.value)
 
   if (!chartInstance.value) {

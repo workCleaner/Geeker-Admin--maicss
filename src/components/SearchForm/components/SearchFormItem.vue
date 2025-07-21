@@ -24,7 +24,6 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'SearchFormItem' })
-import { computed, inject, ref } from 'vue'
 import { handleProp } from '@/utils'
 import type { ColumnProps } from '@/components/ProTable/interface'
 
@@ -50,7 +49,9 @@ const fieldNames = computed(() => {
 const enumMap = inject('enumMap', ref(new Map()))
 const columnEnum = computed(() => {
   let enumData = enumMap.value.get(props.column.prop)
-  if (!enumData) return []
+  if (!enumData) {
+    return []
+  }
   if (props.column.search?.el === 'select-v2' && props.column.fieldNames) {
     enumData = enumData.map((item: { [key: string]: any }) => {
       return { ...item, label: item[fieldNames.value.label], value: item[fieldNames.value.value] }
@@ -85,7 +86,8 @@ const placeholder = computed(() => {
       endPlaceholder: search?.props?.endPlaceholder ?? '结束时间',
     }
   }
-  const placeholder = search?.props?.placeholder ?? (search?.el?.includes('input') ? '请输入' : '请选择')
+  const placeholder =
+    search?.props?.placeholder ?? (search?.el?.includes('input') ? '请输入' : '请选择') + ' ' + props.column.label
   return { placeholder }
 })
 

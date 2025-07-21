@@ -43,7 +43,9 @@ provide('refresh', refreshCurrentPage)
 // 解决详情页 keep-alive 问题
 const wrapperMap = new Map()
 function createComponentWrapper(component, route) {
-  if (!component) return
+  if (!component) {
+    return
+  }
   const wrapperName = route.fullPath
   let wrapper = wrapperMap.get(wrapperName)
   if (!wrapper) {
@@ -58,8 +60,11 @@ watch(
   () => maximize.value,
   () => {
     const app = document.getElementById('app') as HTMLElement
-    if (maximize.value) app.classList.add('main-maximize')
-    else app.classList.remove('main-maximize')
+    if (maximize.value) {
+      app.classList.add('main-maximize')
+    } else {
+      app.classList.remove('main-maximize')
+    }
   },
   { immediate: true }
 )
@@ -78,8 +83,12 @@ watch(
 const screenWidth = ref(0)
 const listeningWindow = useDebounceFn(() => {
   screenWidth.value = document.body.clientWidth
-  if (!isCollapse.value && screenWidth.value < 1200) globalStore.isCollapse = true
-  if (isCollapse.value && screenWidth.value > 1200) globalStore.isCollapse = false
+  if (!isCollapse.value && screenWidth.value < 1200) {
+    globalStore.isCollapse = true
+  }
+  if (isCollapse.value && screenWidth.value > 1200) {
+    globalStore.isCollapse = false
+  }
 }, 100)
 
 useEventListener(window, 'resize', listeningWindow)
